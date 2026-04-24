@@ -1,27 +1,93 @@
 // @ts-nocheck
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Users, Package, Settings, Menu, X, Quote, ChevronDown, Truck } from "lucide-react"
+import { LayoutDashboard, FileText, Users, Package, Settings, Menu, X, Quote, ChevronDown, Truck, RotateCcw } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/LanguageSwitcher"
+import { supabase } from "@/lib/supabase/client"
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname()
   const { t, isHydrated } = useI18n()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [deliveryCount, setDeliveryCount] = useState(0)
+  const [pickupCount, setPickupCount] = useState(0)
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const today = new Date().toISOString().split('T')[0]
+      
+      const { data: quotes } = await supabase
+        .from("quotes")
+        .select("delivery_date, delivery_status, pickup_date, pickup_status")
+        .in("status", ["accepted", "converted"])
+
+      if (quotes) {
+        const deliveriesToday = quotes.filter(q => {
+          if (!q.delivery_date || q.delivery_status === 'completed') return false
+          return q.delivery_date === today
+        }).length
+
+        const pickupsToday = quotes.filter(q => {
+          if (!q.pickup_date || q.pickup_status === 'completed') return false
+          return q.pickup_date === today
+        }).length
+
+        setDeliveryCount(deliveriesToday)
+        setPickupCount(pickupsToday)
+      }
+    }
+
+    fetchCounts()
+  }, [])
 
   const navItems = [
     { href: "/dashboard", label: isHydrated ? t("nav.dashboard") : "Loading...", icon: LayoutDashboard },
     { href: "/invoices", label: isHydrated ? t("nav.invoices") : "Loading...", icon: FileText },
     { href: "/quotes", label: isHydrated ? t("nav.quotes") : "Loading...", icon: Quote },
-    { href: "/deliveries", label: isHydrated ? "Entregas" : "Loading...", icon: Truck },
+    { href: "/deliveries", label: isHydrated ? "Entregas" : "Loading...", icon: Truck, deliveryCount, pickupCount },
     { href: "/clients", label: isHydrated ? t("nav.clients") : "Loading...", icon: Users },
     { href: "/products", label: isHydrated ? t("nav.products") : "Loading...", icon: Package },
     { href: "/settings", label: isHydrated ? t("nav.settings") : "Loading...", icon: Settings },
   ]
+
+  const renderNavItem = (item) => {
+    const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={() => setSidebarOpen(false)}
+        className={`flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 ${
+          isActive 
+            ? "bg-blue-50 text-blue-700 font-medium" 
+            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <item.icon className="w-5 h-5" />
+          <span suppressHydrationWarning>{item.label}</span>
+        </div>
+        {item.href === "/deliveries" && (deliveryCount > 0 || pickupCount > 0) && (
+          <div className="flex gap-1">
+            {deliveryCount > 0 && (
+              <span className="px-1.5 py-0.5 bg-blue-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
+                {deliveryCount}
+              </span>
+            )}
+            {pickupCount > 0 && (
+              <span className="px-1.5 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
+                {pickupCount}
+              </span>
+            )}
+          </div>
+        )}
+      </Link>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -52,24 +118,7 @@ export default function DashboardLayout({ children }) {
         </div>
 
         <nav className="p-4 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 ${
-                  isActive 
-                    ? "bg-blue-50 text-blue-700 font-medium" 
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                <span suppressHydrationWarning>{item.label}</span>
-              </Link>
-            )
-          })}
+          {navItems.map((item) => renderNavItem(item))}
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4">

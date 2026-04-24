@@ -201,27 +201,33 @@ export default function EditInvoicePage() {
                     onChange={(e) => updateItem(i, "description", e.target.value)}
                     className="flex-1 w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <input
-                      type="number"
-                      placeholder="Cant"
-                      value={item.quantity}
-                      onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                      className="w-full sm:w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      min="1"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Precio"
-                      value={item.price}
-                      onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                      className="w-full sm:w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      min="0"
-                      step="0.01"
-                    />
+                  <div className="flex gap-2 w-full sm:w-auto items-end">
+                    <div>
+                      <label className="block text-xs text-slate-500 mb-1">Cant.</label>
+                      <input
+                        type="number"
+                        placeholder="1"
+                        value={item.quantity}
+                        onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
+                        className="w-full sm:w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="1"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-slate-500 mb-1">Precio</label>
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        value={item.price}
+                        onChange={(e) => updateItem(i, "price", Number(e.target.value))}
+                        className="w-full sm:w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
                     <button 
                       onClick={() => removeItem(i)} 
-                      className="p-3 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                      className="p-3 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition mt-5 sm:mt-0"
                       disabled={items.length === 1}
                     >
                       <X className="w-5 h-5" />

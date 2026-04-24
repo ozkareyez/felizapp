@@ -236,25 +236,33 @@ export default function EditQuotePage() {
                 onChange={(e) => updateItem(i, "description", e.target.value)}
                 className="flex-1 w-full border border-slate-200 rounded-lg px-4 py-2.5 bg-white text-slate-900"
               />
-              <div className="flex gap-2 w-full sm:w-auto">
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                  className="w-full sm:w-20 border border-slate-200 rounded-lg px-3 py-2.5 text-center bg-white text-slate-900"
-                  min="1"
-                />
-                <input
-                  type="number"
-                  value={item.price}
-                  onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                  className="w-full sm:w-28 border border-slate-200 rounded-lg px-3 py-2.5 text-right bg-white text-slate-900"
-                  min="0"
-                  step="0.01"
-                />
+              <div className="flex gap-2 w-full sm:w-auto items-end">
+                <div>
+                  <label className="block text-xs text-slate-500 mb-1">Cant.</label>
+                  <input
+                    type="number"
+                    placeholder="1"
+                    value={item.quantity}
+                    onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
+                    className="w-full sm:w-20 border border-slate-200 rounded-lg px-3 py-2.5 text-center bg-white text-slate-900"
+                    min="1"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-slate-500 mb-1">Precio</label>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={item.price}
+                    onChange={(e) => updateItem(i, "price", Number(e.target.value))}
+                    className="w-full sm:w-28 border border-slate-200 rounded-lg px-3 py-2.5 text-right bg-white text-slate-900"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
                 <button 
                   onClick={() => removeItem(i)} 
-                  className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                  className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition mt-5 sm:mt-0"
                   disabled={items.length === 1}
                 >
                   <Trash2 className="w-5 h-5" />
