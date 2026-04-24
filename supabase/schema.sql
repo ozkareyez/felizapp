@@ -265,5 +265,40 @@ LEFT JOIN invoices i ON c.id = i.client_id
 GROUP BY c.id, c.name;
 
 -- =====================================================
+-- USERS TABLE (for admin authentication)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Insert default admin user
+INSERT INTO users (email, name, role) VALUES 
+  ('admin@feliz.com', 'Administrator', 'admin');
+
+-- Enable RLS
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+-- Policy for authenticated users to read profile
+CREATE POLICY "Users can read their own profile" ON users
+  FOR SELECT USING (auth.uid() = id);
+
+-- Policy for admins to read all users
+CREATE POLICY "Admins can read all users" ON users
+  FOR SELECT USING (
+    EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  );
+
+-- Policy for admins to update users
+CREATE POLICY "Admins can update users" ON users
+  FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  );
+
+-- =====================================================
 -- COMPLETE - Database is ready!
 -- =====================================================

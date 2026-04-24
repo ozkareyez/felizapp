@@ -16,6 +16,10 @@ export default function EditInvoicePage() {
   const [items, setItems] = useState([{ description: "", quantity: 1, price: 0 }])
   const [loading, setLoading] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
+  const [showAdminModal, setShowAdminModal] = useState(false)
+  const [adminEmail, setAdminEmail] = useState("")
+  const [adminPassword, setAdminPassword] = useState("")
+  const [adminError, setAdminError] = useState("")
 
   useEffect(() => {
     getData()
@@ -61,7 +65,43 @@ export default function EditInvoicePage() {
 
   const total = items.reduce((sum, item) => sum + (item.quantity * item.price), 0)
 
-  const handleUpdate = async () => {
+  const verifyAdminAndSave = async () => {
+    setAdminError("")
+    
+    if (!adminEmail || !adminPassword) {
+      setAdminError("Ingresa email y contraseña de admin")
+      return
+    }
+
+    const { data: adminUser, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", adminEmail)
+      .eq("role", "admin")
+      .single()
+
+    if (error || !adminUser) {
+      setAdminError("Credenciales de admin inválidas")
+      return
+    }
+
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      email: adminEmail,
+      password: adminPassword
+    })
+
+    if (signInError || !signInData.user) {
+      setAdminError("Credenciales de admin inválidas")
+      return
+    }
+
+    setShowAdminModal(false)
+    setAdminEmail("")
+    setAdminPassword("")
+    proceedWithUpdate()
+  }
+
+  const proceedWithUpdate = async () => {
     if (!clientId) {
       alert("Selecciona un cliente")
       return
@@ -248,7 +288,7 @@ export default function EditInvoicePage() {
 
         <div className="p-6 bg-slate-50 border-t border-slate-200 flex gap-3">
           <button
-            onClick={handleUpdate}
+            onClick={() => setShowAdminModal(true)}
             disabled={loading}
             className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 transition"
           >
@@ -261,6 +301,62 @@ export default function EditInvoicePage() {
             Cancelar
           </button>
         </div>
+
+        {showAdminModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+              <h3 className="text-lg font-bold text-slate-900 mb-4">Verificar Admin</h3>
+              <p className="text-sm text-slate-600 mb-4">Ingresa credenciales de admin para guardar cambios</p>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Email Admin</label>
+                  <input
+                    type="email"
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-4 py-2"
+                    placeholder="admin@feliz.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                  <input
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-4 py-2"
+                    placeholder="••••••••"
+                  />
+                </div>
+                
+                {adminError && (
+                  <p className="text-red-500 text-sm">{adminError}</p>
+                )}
+                
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={verifyAdminAndSave}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium"
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAdminModal(false)
+                      setAdminError("")
+                      setAdminEmail("")
+                      setAdminPassword("")
+                    }}
+                    className="flex-1 bg-slate-100 text-slate-700 py-2 rounded-lg font-medium"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
