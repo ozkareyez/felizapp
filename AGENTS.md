@@ -3,8 +3,8 @@
 ## Dev Commands
 ```bash
 npm run dev      # localhost:3000
-npm run build    # Production build
-npm run lint     # ESLint (0 errors, 32 warnings acceptable)
+npm run build   # Production build
+npm run lint    # ESLint (0 errors acceptable)
 ```
 
 ## Required Setup
@@ -16,15 +16,18 @@ npm run lint     # ESLint (0 errors, 32 warnings acceptable)
 - **Supabase caches schema** - if columns don't exist, run `ALTER TABLE` manually
 
 ## Critical Rules
-- **NO TypeScript**: Every file MUST have `// @ts-nocheck` at the top
+- **NO TypeScript**: Every file MUST have `// @ts-nocheck` at top
 - Company name: **FELIZ ENTERPRISE** (not SpeedInvoice)
 - Currency: AWG (Aruban Florin)
-- PDF content: **English** (not Spanish)
-- Languages: Spanish default, English via i18n (`lib/i18n.js`)
 - **No dark mode**
 
-## Code Conventions (Vercel React Best Practices)
-- **useEffect**: Always use inline async + mounted flag pattern:
+## Mobile Responsive
+- Default padding: `p-2` (not p-4 or p-6) to fit mobile screens
+- Use `flex-col sm:flex-row` for mobile-first layouts
+- Inputs in forms: vertical stack on mobile, horizontal on desktop
+
+## Code Conventions
+- **useEffect**: Always use inline async + mounted flag:
   ```javascript
   useEffect(() => {
     let isMounted = true
@@ -36,38 +39,40 @@ npm run lint     # ESLint (0 errors, 32 warnings acceptable)
     return () => { isMounted = false }
   }, [])
   ```
-- **useState init**: Use lazy initialization for expensive values (localStorage, computed)
-- **Fetch deduplication**: Supabase `fetch` auto-deduplicates within request; use `React.cache()` for server-side
-- **Parallel fetching**: Use `Promise.all()` for independent operations
+- **Date parsing**: Avoid `+ 'T00:00:00'` pattern - causes Invalid Date. Use direct ISO:
+  ```javascript
+  const formatDate = (date) => {
+    if (!date) return ''
+    const d = new Date(date)
+    if (isNaN(d.getTime())) return ''
+    return d.toLocaleDateString("es-ES", { day: "2-digit", month: "long" })
+  }
+  ```
 
 ## Architecture
 - Route Groups: `(auth)` = public, `(dashboard)` = protected
 - Supabase client: `lib/supabase/client.ts`
-- PDF generator: `lib/pdf-generator.js` (uses jsPDF)
+- i18n: `lib/i18n.js` (Spanish default, English via t())
+- PDF: `lib/pdf-generator.js` (jsPDF)
 
 ## Pages
 | Path | Description |
 |------|-------------|
-| `/dashboard` | Analytics + date filters + delivery/pickup notifications |
-| `/invoices` | List with filters, pagination (15/page), responsive cards |
-| `/invoices/[id]` | Detail + click to toggle status (Pendiente/Pagada) |
+| `/dashboard` | Analytics + date filters |
+| `/invoices` | Invoice list with filters |
+| `/invoices/[id]` | Invoice detail + toggle status |
+| `/invoices/[id]/edit` | Edit invoice (labels: Cant., Precio) |
 | `/invoices/create` | Create invoice |
-| `/invoices/[id]/edit` | Edit invoice |
-| `/quotes` | List with filters, pagination |
-| `/quotes/[id]` | Detail + PDF + WhatsApp share + Convert |
-| `/quotes/[id]/convert` | Convert quote to invoice |
+| `/quotes` | Quote list with filters |
+| `/quotes/[id]` | Quote detail + PDF + WhatsApp |
+| `/quotes/[id]/edit` | Edit quote |
+| `/quotes/[id]/convert` | Convert to invoice |
+| `/deliveries` | Deliveries/collections (filters: Hoy/Todas) |
 | `/clients` | Client management |
-| `/products` | Product catalog with daily pricing |
-
-## Key Features
-- Date filters on dashboard (Today/Week/Month/Last Month/All)
-- Delivery/pickup notifications with status tracking
-- Quote → Invoice conversion (status: "converted")
-- WhatsApp share (downloads PDF + opens chat)
-- Excel export from dashboard
+| `/products` | Product catalog |
 
 ## Database Fields
 - `quotes`: `quote_number`, `reference`, `delivery_date`, `pickup_date`, `rental_days`, `delivery_status`, `pickup_status`
 - `quote_items`: `unit_price` (NOT `price`)
-- `invoices`: `invoice_number`
+- `invoices`: `invoice_number`, `delivery_date`, `pickup_date`
 - `invoice_items`: `unit_price`
