@@ -18,26 +18,24 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const today = new Date().toISOString().split('T')[0]
-      
       const { data: quotes } = await supabase
         .from("quotes")
         .select("delivery_date, delivery_status, pickup_date, pickup_status")
         .in("status", ["accepted", "converted"])
 
       if (quotes) {
-        const deliveriesToday = quotes.filter(q => {
-          if (!q.delivery_date || q.delivery_status === 'completed') return false
-          return q.delivery_date === today
+        // All pending deliveries (not completed)
+        const deliveriesPending = quotes.filter(q => {
+          return q.delivery_date && q.delivery_status !== 'completed'
         }).length
 
-        const pickupsToday = quotes.filter(q => {
-          if (!q.pickup_date || q.pickup_status === 'completed') return false
-          return q.pickup_date === today
+        // All pending pickups (not completed)
+        const pickupsPending = quotes.filter(q => {
+          return q.pickup_date && q.pickup_status !== 'completed'
         }).length
 
-        setDeliveryCount(deliveriesToday)
-        setPickupCount(pickupsToday)
+        setDeliveryCount(deliveriesPending)
+        setPickupCount(pickupsPending)
       }
     }
 
@@ -73,15 +71,17 @@ export default function DashboardLayout({ children }) {
         </div>
         {item.href === "/deliveries" && (deliveryCount > 0 || pickupCount > 0) && (
           <div className="flex gap-1">
-            {deliveryCount > 0 && (
-              <span className="px-1.5 py-0.5 bg-blue-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
-                {deliveryCount}
-              </span>
-            )}
-            {pickupCount > 0 && (
-              <span className="px-1.5 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[20px] text-center">
-                {pickupCount}
-              </span>
+            {(deliveryCount > 0 || pickupCount > 0) && (
+              <>
+                <span className="flex items-center gap-1 px-2 py-1 bg-blue-500 text-white text-xs font-bold rounded-lg min-w-[28px] justify-center">
+                  <Truck className="w-3 h-3" />
+                  {deliveryCount}
+                </span>
+                <span className="flex items-center gap-1 px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-lg min-w-[28px] justify-center">
+                  <RotateCcw className="w-3 h-3" />
+                  {pickupCount}
+                </span>
+              </>
             )}
           </div>
         )}
