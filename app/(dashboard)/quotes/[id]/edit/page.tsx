@@ -25,9 +25,6 @@ export default function EditQuotePage() {
   const [adminEmail, setAdminEmail] = useState("")
   const [adminPassword, setAdminPassword] = useState("")
   const [adminError, setAdminError] = useState("")
-  const [notes, setNotes] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [initialLoad, setInitialLoad] = useState(true)
 
   useEffect(() => {
     getData()
