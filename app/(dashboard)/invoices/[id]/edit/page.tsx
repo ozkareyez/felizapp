@@ -69,32 +69,28 @@ export default function EditInvoicePage() {
     setAdminError("")
     
     if (!adminEmail || !adminPassword) {
-      setAdminError("Ingresa email y contraseña de admin")
+      setAdminError("Ingresa email y contraseña")
       return
     }
 
-    const { data: adminUser, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", adminEmail)
-      .eq("role", "admin")
-      .single()
-
-    if (error || !adminUser) {
-      setAdminError("Credenciales de admin inválidas")
-      return
-    }
-
+    // Sign in with Supabase Auth directly
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: adminEmail,
       password: adminPassword
     })
 
-    if (signInError || !signInData.user) {
-      setAdminError("Credenciales de admin inválidas")
+    if (signInError) {
+      console.error("Auth error:", signInError.message)
+      setAdminError("Email o contraseña incorrectos")
       return
     }
 
+    if (!signInData.user) {
+      setAdminError("Credenciales inválidas")
+      return
+    }
+
+    // Success - close modal and save
     setShowAdminModal(false)
     setAdminEmail("")
     setAdminPassword("")
