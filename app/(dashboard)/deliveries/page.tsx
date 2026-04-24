@@ -98,7 +98,7 @@ export default function DeliveriesPage() {
 
   if (loading) {
     return (
-      <div className="p-6 md:p-8 max-w-6xl mx-auto">
+      <div className="p-2 max-w-6xl mx-auto">
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-slate-200 rounded w-48"></div>
           <div className="h-64 bg-slate-200 rounded"></div>
@@ -108,7 +108,7 @@ export default function DeliveriesPage() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+    <div className="p-2 md:p-8 max-w-6xl mx-auto">
       <div className="mb-6">
         <Link href="/dashboard" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
           <ArrowLeft className="w-4 h-4" />

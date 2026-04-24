@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }) {
           <LanguageSwitcher />
         </header>
 
-        <div className="p-4 lg:p-8">
+        <div className="p-2 lg:p-8">
           {children}
         </div>
       </main>

@@ -297,7 +297,7 @@ export default function DashboardPage() {
   const colorMap = { blue: "#3b82f6", violet: "#8b5cf6", emerald: "#10b981", amber: "#f59e0b" }
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+    <div className="p-2 md:p-6 max-w-7xl mx-auto">
       {/* Filters */}
       <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">

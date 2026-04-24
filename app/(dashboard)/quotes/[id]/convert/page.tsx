@@ -132,7 +132,7 @@ export default function ConvertQuotePage() {
 
   if (quote.status === "converted") {
     return (
-      <div className="p-6 md:p-8 max-w-2xl mx-auto">
+      <div className="p-2 md:p-8 max-w-2xl mx-auto">
         <div className="mb-6">
           <Link href={`/quotes/${id}`} className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
             <ArrowLeft className="w-4 h-4" />
@@ -156,7 +156,7 @@ export default function ConvertQuotePage() {
   }
 
   return (
-    <div className="p-6 md:p-8 max-w-4xl mx-auto">
+    <div className="p-2 md:p-8 max-w-4xl mx-auto">
       <div className="mb-6">
         <Link href={`/quotes/${id}`} className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
           <ArrowLeft className="w-4 h-4" />
