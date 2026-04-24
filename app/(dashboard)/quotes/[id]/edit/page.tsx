@@ -213,14 +213,14 @@ export default function EditQuotePage() {
 
         <div className="space-y-3">
           {items.map((item, i) => (
-            <div key={i} className="flex gap-3 items-start p-4 bg-slate-50 rounded-xl">
-              <div className="flex-1">
+            <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-start sm:items-center p-3 sm:p-0 bg-slate-50 sm:bg-transparent rounded-xl sm:rounded-none">
+              <div className="flex-1 w-full">
                 <select
                   value={item.product_id}
                   onChange={(e) => updateItem(i, "product_id", e.target.value)}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2.5 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Seleccionar producto...</option>
+                  <option value="">Seleccionar produto...</option>
                   {Object.entries(productsByCategory).map(([cat, prods]) => (
                     <optgroup key={cat} label={cat}>
                       {prods.map(p => (
@@ -234,30 +234,32 @@ export default function EditQuotePage() {
                 placeholder={t("invoices.description")}
                 value={item.description}
                 onChange={(e) => updateItem(i, "description", e.target.value)}
-                className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 bg-white text-slate-900"
+                className="flex-1 w-full border border-slate-200 rounded-lg px-4 py-2.5 bg-white text-slate-900"
               />
-              <input
-                type="number"
-                value={item.quantity}
-                onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                className="w-20 border border-slate-200 rounded-lg px-3 py-2.5 text-center bg-white text-slate-900"
-                min="1"
-              />
-              <input
-                type="number"
-                value={item.price}
-                onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                className="w-28 border border-slate-200 rounded-lg px-3 py-2.5 text-right bg-white text-slate-900"
-                min="0"
-                step="0.01"
-              />
-              <button 
-                onClick={() => removeItem(i)} 
-                className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
-                disabled={items.length === 1}
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <input
+                  type="number"
+                  value={item.quantity}
+                  onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
+                  className="w-full sm:w-20 border border-slate-200 rounded-lg px-3 py-2.5 text-center bg-white text-slate-900"
+                  min="1"
+                />
+                <input
+                  type="number"
+                  value={item.price}
+                  onChange={(e) => updateItem(i, "price", Number(e.target.value))}
+                  className="w-full sm:w-28 border border-slate-200 rounded-lg px-3 py-2.5 text-right bg-white text-slate-900"
+                  min="0"
+                  step="0.01"
+                />
+                <button 
+                  onClick={() => removeItem(i)} 
+                  className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                  disabled={items.length === 1}
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>

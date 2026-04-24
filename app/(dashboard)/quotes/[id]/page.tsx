@@ -61,8 +61,8 @@ export default function QuoteDetailPage() {
   const getRentalDays = () => {
     if (quote.rental_days) return quote.rental_days
     if (quote.delivery_date && quote.pickup_date) {
-      const delivery = new Date(quote.delivery_date + 'T00:00:00')
-      const pickup = new Date(quote.pickup_date + 'T00:00:00')
+      const delivery = new Date(quote.delivery_date)
+      const pickup = new Date(quote.pickup_date)
       const diffTime = pickup - delivery
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
       return diffDays > 0 ? diffDays : 1
@@ -80,13 +80,15 @@ export default function QuoteDetailPage() {
 
   const formatDate = (date) => {
     if (!date) return ''
-    const d = new Date(date + 'T00:00:00')
+    const d = new Date(date)
+    if (isNaN(d.getTime())) return ''
     return d.toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" })
   }
 
   const formatDateISO = (date) => {
-    if (!date) return 'N/A'
-    const d = new Date(date + 'T00:00:00')
+    if (!date) return ''
+    const d = new Date(date)
+    if (isNaN(d.getTime())) return ''
     return d.toLocaleDateString('es-ES')
   }
 
@@ -94,16 +96,16 @@ export default function QuoteDetailPage() {
     const fileName = `Cotizacion-${quote.reference || quote.quote_number || 'FELIZ'}.pdf`
     await generateQuotePDF(quote, items, client, rentalDays)
     setTimeout(() => {
-      const text = `*COTIZACIÓN ${quote.reference || quote.quote_number}*\n\n` +
-        `*Cliente:* ${client?.name || 'N/A'}\n` +
-        `*Tipo de Evento:* ${quote.event_type || 'N/A'}\n` +
-        `*Ubicación:* ${quote.event_location || 'N/A'}\n` +
-        `*Entrega:* ${formatDateISO(quote.delivery_date)}\n` +
-        `*Recogida:* ${formatDateISO(quote.pickup_date)}\n` +
-        `*Días de alquiler:* ${rentalDays}\n\n` +
-        `*TOTAL: AWG ${quote.total || subtotal}*\n\n` +
-        `El PDF se ha descargado. Por favor, envíalo como documento adjunto en WhatsApp.\n\n` +
-        `FELIZ ENTERPRISE - Aruba`
+      let text = `*COTIZACIÓN ${quote.reference || quote.quote_number}*\n\n`
+      if (client?.name) text += `*Cliente:* ${client.name}\n`
+      if (quote.event_type) text += `*Tipo de Evento:* ${quote.event_type}\n`
+      if (quote.event_location) text += `*Ubicación:* ${quote.event_location}\n`
+      if (quote.delivery_date) text += `*Entrega:* ${formatDateISO(quote.delivery_date)}\n`
+      if (quote.pickup_date) text += `*Recogida:* ${formatDateISO(quote.pickup_date)}\n`
+      if (rentalDays) text += `*Días de alquiler:* ${rentalDays}\n\n`
+      text += `*TOTAL: AWG ${quote.total || subtotal}*\n\n`
+      text += `El PDF se ha descargado. Por favor, envíalo como documento adjunto en WhatsApp.\n\n`
+      text += `FELIZ ENTERPRISE - Aruba`
       
       const url = `https://wa.me/?text=${encodeURIComponent(text)}`
       window.open(url, '_blank')

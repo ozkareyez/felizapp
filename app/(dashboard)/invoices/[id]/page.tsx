@@ -60,7 +60,8 @@ export default function InvoiceDetailPage() {
 
   const formatDate = (date) => {
     if (!date) return ''
-    const d = new Date(date + 'T00:00:00')
+    const d = new Date(date)
+    if (isNaN(d.getTime())) return ''
     return d.toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" })
   }
 

@@ -194,37 +194,39 @@ export default function EditInvoicePage() {
 
             <div className="space-y-3">
               {items.map((item, i) => (
-                <div key={i} className="flex gap-3 items-start">
+                <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-start sm:items-center p-3 sm:p-0 bg-slate-50 sm:bg-transparent rounded-xl sm:rounded-none">
                   <input
                     placeholder="Descripción del servicio"
                     value={item.description}
                     onChange={(e) => updateItem(i, "description", e.target.value)}
-                    className="flex-1 border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="flex-1 w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
-                  <input
-                    type="number"
-                    placeholder="Cant"
-                    value={item.quantity}
-                    onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                    className="w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    min="1"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Precio"
-                    value={item.price}
-                    onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                    className="w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    min="0"
-                    step="0.01"
-                  />
-                  <button 
-                    onClick={() => removeItem(i)} 
-                    className="p-3 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
-                    disabled={items.length === 1}
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <input
+                      type="number"
+                      placeholder="Cant"
+                      value={item.quantity}
+                      onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
+                      className="w-full sm:w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      min="1"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Precio"
+                      value={item.price}
+                      onChange={(e) => updateItem(i, "price", Number(e.target.value))}
+                      className="w-full sm:w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      min="0"
+                      step="0.01"
+                    />
+                    <button 
+                      onClick={() => removeItem(i)} 
+                      className="p-3 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                      disabled={items.length === 1}
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
