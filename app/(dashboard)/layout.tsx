@@ -4,7 +4,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Users, Package, Settings, Menu, X, Quote, ChevronDown } from "lucide-react"
+import { LayoutDashboard, FileText, Users, Package, Settings, Menu, X, Quote, ChevronDown, Truck } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/LanguageSwitcher"
 
@@ -17,6 +17,7 @@ export default function DashboardLayout({ children }) {
     { href: "/dashboard", label: isHydrated ? t("nav.dashboard") : "Loading...", icon: LayoutDashboard },
     { href: "/invoices", label: isHydrated ? t("nav.invoices") : "Loading...", icon: FileText },
     { href: "/quotes", label: isHydrated ? t("nav.quotes") : "Loading...", icon: Quote },
+    { href: "/deliveries", label: isHydrated ? "Entregas" : "Loading...", icon: Truck },
     { href: "/clients", label: isHydrated ? t("nav.clients") : "Loading...", icon: Users },
     { href: "/products", label: isHydrated ? t("nav.products") : "Loading...", icon: Package },
     { href: "/settings", label: isHydrated ? t("nav.settings") : "Loading...", icon: Settings },

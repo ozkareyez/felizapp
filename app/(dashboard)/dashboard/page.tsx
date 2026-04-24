@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import Link from "next/link"
-import { FileText, Users, DollarSign, Clock, FilePlus, UserPlus, ClipboardList, ArrowUpRight, TrendingUp, TrendingDown, Target, Calendar, BarChart3, Download, Truck, RotateCcw, Check, X } from "lucide-react"
+import { FileText, Users, DollarSign, Clock, FilePlus, UserPlus, ClipboardList, ArrowUpRight, TrendingUp, TrendingDown, Target, Calendar, BarChart3, Download } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
 import { exportAllData } from "@/lib/excel-export"
@@ -164,17 +164,13 @@ const getData = async (filters = {}) => {
       revenueGrowth,
       totalQuotes: quotes?.length || 0,
       acceptedQuotes: (quotes || []).filter(q => q.status === "accepted").length,
-      convertedQuotes: (quotes || []).filter(q => q.status === "converted").length,
-      deliveryCount: deliveryNotifications.length,
-      pickupCount: pickupNotifications.length
+      convertedQuotes: (quotes || []).filter(q => q.status === "converted").length
     },
     recentInvoices: invoices?.slice(0, 5) || [],
     recentQuotes: quotes?.slice(0, 3) || [],
     clients: clientsMap,
     revenueChartData,
-    statusChartData,
-    deliveryNotifications,
-    pickupNotifications
+    statusChartData
   }
 }
 
@@ -192,8 +188,6 @@ export default function DashboardPage() {
   const [clients, setClients] = useState({})
   const [revenueChartData, setRevenueChartData] = useState([])
   const [statusChartData, setStatusChartData] = useState([])
-  const [deliveryNotifications, setDeliveryNotifications] = useState([])
-  const [pickupNotifications, setPickupNotifications] = useState([])
 
   const getAlertType = (dateStr) => {
     if (!dateStr) return ''
@@ -206,28 +200,6 @@ export default function DashboardPage() {
     if (daysDiff === 0) return 'today'
     if (daysDiff === 1) return 'tomorrow'
     return 'upcoming'
-  }
-
-  const markDeliveryComplete = async (id) => {
-    const { error } = await supabase.from("quotes").update({ delivery_status: 'completed' }).eq("id", id)
-    if (error) {
-      console.error("Error updating delivery:", error)
-      return
-    }
-    const data = await getData({ dateFrom, dateTo })
-    setDeliveryNotifications(data.deliveryNotifications || [])
-    setStats(prev => ({ ...prev, deliveryCount: data.stats.deliveryCount }))
-  }
-
-  const markPickupComplete = async (id) => {
-    const { error } = await supabase.from("quotes").update({ pickup_status: 'completed' }).eq("id", id)
-    if (error) {
-      console.error("Error updating pickup:", error)
-      return
-    }
-    const data = await getData({ dateFrom, dateTo })
-    setPickupNotifications(data.pickupNotifications || [])
-    setStats(prev => ({ ...prev, pickupCount: data.stats.pickupCount }))
   }
 
   const applyPreset = (preset) => {
@@ -274,8 +246,6 @@ export default function DashboardPage() {
       setClients(data.clients)
       setRevenueChartData(data.revenueChartData)
       setStatusChartData(data.statusChartData)
-      setDeliveryNotifications(data.deliveryNotifications || [])
-      setPickupNotifications(data.pickupNotifications || [])
     })
   }
 
@@ -286,8 +256,6 @@ export default function DashboardPage() {
       setClients(data.clients)
       setRevenueChartData(data.revenueChartData)
       setStatusChartData(data.statusChartData)
-      setDeliveryNotifications(data.deliveryNotifications || [])
-      setPickupNotifications(data.pickupNotifications || [])
     })
   }
 
@@ -298,8 +266,6 @@ export default function DashboardPage() {
       setClients(data.clients)
       setRevenueChartData(data.revenueChartData)
       setStatusChartData(data.statusChartData)
-      setDeliveryNotifications(data.deliveryNotifications || [])
-      setPickupNotifications(data.pickupNotifications || [])
     })
   }, [])
 
@@ -366,28 +332,6 @@ export default function DashboardPage() {
           Export Excel
         </button>
       </div>
-
-      {/* Notification Panel */}
-      {(deliveryNotifications.length > 0 || pickupNotifications.length > 0) && (
-        <div className="mb-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-5 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold mb-1">Próximas Entregas y Recolecciones</h2>
-              <p className="text-blue-100 text-sm">Tienes {deliveryNotifications.length + pickupNotifications.length} tareas pendientes</p>
-            </div>
-            <div className="flex gap-4 text-center">
-              <div className="bg-white/20 rounded-xl px-4 py-2">
-                <p className="text-3xl font-bold">{deliveryNotifications.length}</p>
-                <p className="text-xs text-blue-100">Entregas</p>
-              </div>
-              <div className="bg-white/20 rounded-xl px-4 py-2">
-                <p className="text-3xl font-bold">{pickupNotifications.length}</p>
-                <p className="text-xs text-blue-100">Recolecciones</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -477,121 +421,6 @@ export default function DashboardPage() {
             <span className="text-sm text-slate-500">{t("analytics.avgPaymentDays")}</span>
           </div>
           <p className="text-2xl font-bold text-slate-900">--</p>
-        </div>
-      </div>
-
-      {/* Delivery & Pickup Notifications */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center"><Truck className="w-5 h-5 text-blue-600" /></div>
-            <h3 className="font-semibold text-slate-900">Entregas</h3>
-            <span className="ml-auto px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">{stats.deliveryCount} pendientes</span>
-          </div>
-          {deliveryNotifications.length > 0 ? (
-            <div className="space-y-3">
-              {deliveryNotifications.slice(0, 5).map(q => {
-                const alertType = getAlertType(q.delivery_date)
-                const alertStyles = {
-                  overdue: "bg-red-50 border-red-200",
-                  today: "bg-orange-50 border-orange-200",
-                  tomorrow: "bg-amber-50 border-amber-200",
-                  upcoming: "bg-blue-50 border-blue-200"
-                }
-                const alertLabels = {
-                  overdue: "Atrasado",
-                  today: "Hoy",
-                  tomorrow: "Mañana",
-                  upcoming: "Próximo"
-                }
-                const alertColors = {
-                  overdue: "bg-red-500",
-                  today: "bg-orange-500",
-                  tomorrow: "bg-amber-500",
-                  upcoming: "bg-blue-500"
-                }
-                return (
-                  <div key={q.id} className={`flex items-center justify-between p-3 rounded-xl border transition ${alertStyles[alertType]}`}>
-                    <Link href={`/quotes/${q.id}`} className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="font-bold text-slate-900 text-sm">{q.reference || q.quote_number || 'Cotización'}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded-full text-white ${alertColors[alertType]}`}>
-                          {alertLabels[alertType]}
-                        </span>
-                      </div>
-                      <p className="font-medium text-slate-700 text-sm">{clients[q.client_id] || 'Cliente'}</p>
-                      <p className="text-xs text-slate-500 mt-1">{q.event_location || 'Sin ubicación'}</p>
-                    </Link>
-                    <div className="text-right ml-4">
-                      <p className="text-xs text-slate-400">{formatDate(q.delivery_date)}</p>
-                      <p className="text-xs text-slate-500 mt-1">{q.event_type || ''}</p>
-                      <button
-                        onClick={() => markDeliveryComplete(q.id)}
-                        className="mt-2 p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
-                        title="Marcar como completado"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <p className="text-sm text-slate-400">No hay entregas programadas</p>
-          )}
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center"><RotateCcw className="w-5 h-5 text-orange-600" /></div>
-            <h3 className="font-semibold text-slate-900">Recolecciones</h3>
-            <span className="ml-auto px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">{stats.pickupCount} pendientes</span>
-          </div>
-          {pickupNotifications.length > 0 ? (
-            <div className="space-y-3">
-              {pickupNotifications.slice(0, 5).map(q => {
-                const alertType = getAlertType(q.pickup_date)
-                const alertStyles = {
-                  yesterday: "bg-red-50 border-red-200",
-                  today: "bg-orange-50 border-orange-200",
-                  tomorrow: "bg-blue-50 border-blue-200"
-                }
-                const alertLabels = {
-                  yesterday: "Ayer",
-                  today: "Hoy",
-                  tomorrow: "Mañana"
-                }
-                return (
-                  <div key={q.id} className={`flex items-center justify-between p-3 rounded-xl border transition ${alertStyles[alertType]}`}>
-                    <Link href={`/quotes/${q.id}`} className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="font-bold text-slate-900 text-sm">{q.reference || q.quote_number || 'Cotización'}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${alertType === 'today' ? 'bg-orange-500 text-white' : alertType === 'yesterday' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}>
-                          {alertLabels[alertType]}
-                        </span>
-                      </div>
-                      <p className="font-medium text-slate-700 text-sm">{clients[q.client_id] || 'Cliente'}</p>
-                      <p className="text-xs text-slate-500 mt-1">{q.event_location || 'Sin ubicación'}</p>
-                    </Link>
-                    <div className="text-right ml-4">
-                      <p className="text-xs text-slate-400">{formatDate(q.pickup_date)}</p>
-                      <p className="text-xs text-slate-500 mt-1">{q.event_type || ''}</p>
-                      <button
-                        onClick={() => markPickupComplete(q.id)}
-                        className="mt-2 p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
-                        title="Marcar como completado"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <p className="text-sm text-slate-400">No hay recolecciones programadas</p>
-          )}
         </div>
       </div>
 
