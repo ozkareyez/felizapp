@@ -14,7 +14,6 @@ export default function DeliveriesPage() {
   const [pickupItems, setPickupItems] = useState([])
   const [clients, setClients] = useState({})
   const [filter, setFilter] = useState("pending")
-  const [dateFilter, setDateFilter] = useState("today")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -79,38 +78,17 @@ export default function DeliveriesPage() {
   }
 
   const items = activeTab === "delivery" ? deliveryItems : pickupItems
-  
-  // Contador para HOY
-  const todayCount = items.filter(i => {
-    const dateField = activeTab === "delivery" ? i.delivery_date : i.pickup_date
-    const status = activeTab === "delivery" ? i.delivery_status : i.pickup_status
-    const today = new Date().toISOString().split('T')[0]
-    return dateField === today && (!status || status !== "completed")
-  }).length
-  
-  // Contador total pendiente
-  const allPendingCount = items.filter(i => {
+  const filteredItems = items.filter(item => {
+    const statusField = activeTab === "delivery" ? item.delivery_status : item.pickup_status
+    if (filter === "pending") return !statusField || statusField !== "completed"
+    if (filter === "completed") return statusField === "completed"
+    return true
+  })
+
+  const pendingCount = items.filter(i => {
     const status = activeTab === "delivery" ? i.delivery_status : i.pickup_status
     return !status || status !== "completed"
   }).length
-
-  const filteredItems = items.filter(item => {
-    const dateField = activeTab === "delivery" ? item.delivery_date : item.pickup_date
-    const statusField = activeTab === "delivery" ? item.delivery_status : item.pickup_status
-    
-    if (filter === "completed") {
-      return statusField === "completed"
-    }
-    
-    if (dateFilter === "today") {
-      const today = new Date().toISOString().split('T')[0]
-      return dateField === today && (!statusField || statusField !== "completed")
-    }
-    
-    return !statusField || statusField !== "completed"
-  })
-
-  const pendingCount = dateFilter === "today" ? todayCount : allPendingCount
 
   const completedCount = items.filter(i => {
     const status = activeTab === "delivery" ? i.delivery_status : i.pickup_status
@@ -177,30 +155,7 @@ export default function DeliveriesPage() {
         </div>
 
         {/* Filters */}
-        <div className="p-2 border-b border-slate-200 flex gap-2 flex-wrap items-center">
-          <span className="text-xs text-slate-500 font-medium">Fecha:</span>
-          <button
-            onClick={() => setDateFilter("today")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-              dateFilter === "today"
-                ? "bg-blue-600 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            }`}
-          >
-            Hoy
-          </button>
-          <button
-            onClick={() => setDateFilter("all")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-              dateFilter === "all"
-                ? "bg-slate-600 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            }`}
-          >
-            Todas
-          </button>
-          
-          <span className="ml-auto text-xs text-slate-500 font-medium">Estado:</span>
+        <div className="p-2 border-b border-slate-200 flex gap-2 flex-wrap">
           <button
             onClick={() => setFilter("pending")}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
@@ -209,7 +164,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Pend.
+            Pendientes ({pendingCount})
           </button>
           <button
             onClick={() => setFilter("completed")}
@@ -219,7 +174,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Compl.
+            Completadas ({completedCount})
           </button>
           <button
             onClick={() => setFilter("all")}
@@ -229,7 +184,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Todas
+            Todas ({items.length})
           </button>
         </div>
 
