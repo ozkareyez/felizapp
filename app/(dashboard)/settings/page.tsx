@@ -62,21 +62,48 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setSaving(true)
     
-    await supabase
+    const { data: existing } = await supabase
       .from("companies")
-      .update({
-        name: companyName,
-        email: companyEmail,
-        phone: companyPhone,
-        address: companyAddress,
-        ruc: companyRuc
-      })
+      .select("id")
       .eq("id", "2b58cc88-82a4-444b-86d3-e5b952320d5a")
+      .single()
+
+    let error
+    if (existing) {
+      const result = await supabase
+        .from("companies")
+        .update({
+          name: companyName,
+          email: companyEmail,
+          phone: companyPhone,
+          address: companyAddress,
+          ruc: companyRuc
+        })
+        .eq("id", "2b58cc88-82a4-444b-86d3-e5b952320d5a")
+      error = result.error
+    } else {
+      const result = await supabase
+        .from("companies")
+        .insert([{
+          id: "2b58cc88-82a4-444b-86d3-e5b952320d5a",
+          name: companyName,
+          email: companyEmail,
+          phone: companyPhone,
+          address: companyAddress,
+          ruc: companyRuc
+        }])
+      error = result.error
+    }
 
     localStorage.setItem("notifications", notifications ? "true" : "false")
     
+    if (error) {
+      console.error("Error guardando:", error)
+      alert("Error al guardar: " + error.message)
+    }
+    
     setSaving(false)
-    setSaved(true)
+    setSaved(!error)
     setTimeout(() => setSaved(false), 2000)
   }
 
