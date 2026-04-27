@@ -29,7 +29,7 @@ export default function SettingsPage() {
       setCompanyEmail(data.email || "info@felizaruba.com")
       setCompanyPhone(data.phone || "+297 000-0000")
       setCompanyAddress(data.address || "Aruba")
-      setCompanyRuc(data.ruc || "")
+      setCompanyRuc(data.tax_id || "")
     }
 
     const savedNotifications = localStorage.getItem("notifications")
@@ -48,7 +48,7 @@ export default function SettingsPage() {
         setCompanyEmail(data.email || "info@felizaruba.com")
         setCompanyPhone(data.phone || "+297 000-0000")
         setCompanyAddress(data.address || "Aruba")
-        setCompanyRuc(data.ruc || "")
+        setCompanyRuc(data.tax_id || "")
       }
       const savedNotifications = localStorage.getItem("notifications")
       if (savedNotifications !== null) {
@@ -77,7 +77,7 @@ export default function SettingsPage() {
           email: companyEmail,
           phone: companyPhone,
           address: companyAddress,
-          ruc: companyRuc
+          tax_id: companyRuc
         })
         .eq("id", "2b58cc88-82a4-444b-86d3-e5b952320d5a")
       error = result.error
@@ -90,7 +90,7 @@ export default function SettingsPage() {
           email: companyEmail,
           phone: companyPhone,
           address: companyAddress,
-          ruc: companyRuc
+          tax_id: companyRuc
         }])
       error = result.error
     }
