@@ -17,7 +17,16 @@
     "apply": "Aplicar",
     "from": "Desde",
     "to": "Hasta",
-    "export": "Exportar Excel"
+    "export": "Exportar Excel",
+    "location": "Ubicación",
+    "noLocation": "Sin ubicación",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "pending": "Pendiente",
+    "completed": "Completada",
+    "all": "Todos"
   },
   "nav": {
     "dashboard": "Panel",
@@ -56,6 +65,16 @@
     "clientsThisMonth": "this month",
     "invoices": "facturas",
     "newClients": "Nuevos Clientes"
+  },
+  "deliveries": {
+    "title": "Entregas y Recolecciones",
+    "subtitle": "Gestiona entregas y recolectas",
+    "deliveries": "Entregas",
+    "pickups": "Recolecciones",
+    "all": "Todos",
+    "pending": "Pendientes",
+    "completed": "Completadas",
+    "markComplete": "Marcar completado"
   },
   "invoices": {
     "title": "Facturas",
@@ -143,7 +162,18 @@
     "downloadPdf": "Descargar PDF",
     "shareWhatsApp": "Compartir WhatsApp",
     "convert": "Convertir",
-    "notes": "Notas"
+    "notes": "Notas",
+    "quote": "Cotización"
+  },
+  "whatsapp": {
+    "greeting": "Aquí está la cotización",
+    "pdfDownloaded": "El PDF se ha descargado. Por favor, envíalo como documento adjunto en WhatsApp.",
+    "delivery": "Entrega",
+    "pickup": "Recogida",
+    "rentalDays": "Días de alquiler",
+    "total": "TOTAL",
+    "eventType": "Tipo de Evento",
+    "location": "Ubicación"
   },
   "settings": {
     "title": "Ajustes",
@@ -183,5 +213,11 @@
     "reunionFamiliar": "Reunión Familiar",
     "eventoEscolar": "Evento Escolar",
     "otro": "Otro"
+  },
+  "alerts": {
+    "overdue": "Atrasado",
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "upcoming": "Próximo"
   }
 }

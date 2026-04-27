@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import Link from "next/link"
-import { ArrowLeft, Truck, RotateCcw, Check, X, Calendar, MapPin, User, Package } from "lucide-react"
+import { ArrowLeft, Truck, RotateCcw, Check, Calendar, MapPin, User, Package } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 
 export default function DeliveriesPage() {
@@ -13,6 +13,7 @@ export default function DeliveriesPage() {
   const [deliveryItems, setDeliveryItems] = useState([])
   const [pickupItems, setPickupItems] = useState([])
   const [clients, setClients] = useState({})
+  const [clientsData, setClientsData] = useState([])
   const [filter, setFilter] = useState("pending")
   const [loading, setLoading] = useState(true)
 
@@ -24,12 +25,13 @@ export default function DeliveriesPage() {
     setLoading(true)
     const [{ data: quotesData }, { data: clientsData }] = await Promise.all([
       supabase.from("quotes").select("*").order("delivery_date", { ascending: true }),
-      supabase.from("clients").select("id, name")
+      supabase.from("clients").select("id, name, address")
     ])
 
     const clientsMap = {}
-    clientsData?.forEach(c => { clientsMap[c.id] = c.name })
+    clientsData?.forEach(c => { clientsMap[c.id] = { name: c.name, address: c.address } })
     setClients(clientsMap)
+    setClientsData(clientsData || [])
 
     const activeQuotes = (quotesData || []).filter(q => 
       q.status === "accepted" || q.status === "converted"
@@ -111,7 +113,7 @@ export default function DeliveriesPage() {
       <div className="mb-6">
         <Link href="/dashboard" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
           <ArrowLeft className="w-4 h-4" />
-          Volver al dashboard
+          {t("common.back")}
         </Link>
       </div>
 
@@ -128,7 +130,7 @@ export default function DeliveriesPage() {
               }`}
             >
               <Truck className="w-5 h-5" />
-              Entregas
+              {t("deliveries.deliveries")}
               {pendingCount > 0 && (
                 <span className="ml-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
                   {pendingCount}
@@ -144,7 +146,7 @@ export default function DeliveriesPage() {
               }`}
             >
               <RotateCcw className="w-5 h-5" />
-              Recolecciones
+              {t("deliveries.pickups")}
               {pendingCount > 0 && (
                 <span className="ml-1 px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
                   {pendingCount}
@@ -164,7 +166,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Pendientes ({pendingCount})
+            {t("deliveries.pending")} ({pendingCount})
           </button>
           <button
             onClick={() => setFilter("completed")}
@@ -174,7 +176,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Completadas ({completedCount})
+            {t("deliveries.completed")} ({completedCount})
           </button>
           <button
             onClick={() => setFilter("all")}
@@ -184,7 +186,7 @@ export default function DeliveriesPage() {
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            Todas ({items.length})
+            {t("deliveries.all")} ({items.length})
           </button>
         </div>
 
@@ -193,7 +195,7 @@ export default function DeliveriesPage() {
           {filteredItems.length === 0 ? (
             <div className="p-8 text-center text-slate-400">
               <Package className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>No hay {filter === "pending" ? "pendientes" : filter === "completed" ? "completadas" : ""}</p>
+              <p>{filter === "pending" ? t("deliveries.pending") : filter === "completed" ? t("deliveries.completed") : t("deliveries.all")}</p>
             </div>
           ) : (
             filteredItems.map((item) => {
@@ -231,16 +233,16 @@ export default function DeliveriesPage() {
                         href={`/quotes/${item.id}`}
                         className="font-bold text-slate-900 hover:text-blue-600 truncate"
                       >
-                        {item.reference || item.quote_number || 'Cotización'}
+                        {item.reference || item.quote_number || t("quotes.title")}
                       </Link>
                       {!isCompleted && (
                         <span className={`text-xs px-2 py-0.5 rounded-full text-white ${alertColors[alertType]}`}>
-                          {alertType === "overdue" ? "Atrasado" : alertType === "today" ? "Hoy" : alertType === "tomorrow" ? "Mañana" : "Próximo"}
+                          {t(`alerts.${alertType}`)}
                         </span>
                       )}
                       {isCompleted && (
                         <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-                          Completed
+                          {t("common.completed")}
                         </span>
                       )}
                     </div>
@@ -248,11 +250,11 @@ export default function DeliveriesPage() {
                     <div className="flex items-center gap-4 mt-2 text-sm text-slate-600 flex-wrap">
                       <span className="flex items-center gap-1">
                         <User className="w-4 h-4" />
-                        {clients[item.client_id] || 'Cliente'}
+                        {clients[item.client_id]?.name || 'Cliente'}
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
-                        {item.event_location || 'Sin ubicación'}
+                        {item.event_location || clients[item.client_id]?.address || t("common.noLocation")}
                       </span>
                     </div>
                     
@@ -273,7 +275,7 @@ export default function DeliveriesPage() {
                     <Link
                       href={`/quotes/${item.id}`}
                       className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                      title="Ver cotización"
+                      title={t("common.view")}
                     >
                       <Package className="w-5 h-5" />
                     </Link>
@@ -281,7 +283,7 @@ export default function DeliveriesPage() {
                       <button
                         onClick={() => activeTab === "delivery" ? markDeliveryComplete(item.id) : markPickupComplete(item.id)}
                         className="p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
-                        title="Marcar como completado"
+                        title={t("deliveries.markComplete")}
                       >
                         <Check className="w-5 h-5" />
                       </button>

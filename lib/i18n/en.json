@@ -13,7 +13,20 @@
     "total": "Total",
     "status": "Status",
     "date": "Date",
-    "required": "Required"
+    "required": "Required",
+    "apply": "Apply",
+    "from": "From",
+    "to": "To",
+    "export": "Export Excel",
+    "location": "Location",
+    "noLocation": "No location",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "approve": "Approve",
+    "reject": "Reject",
+    "pending": "Pending",
+    "completed": "Completed",
+    "all": "All"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -34,7 +47,34 @@
     "quickActions": "Quick Actions",
     "viewAll": "View All",
     "noInvoices": "No invoices yet",
-    "createFirst": "Create your first invoice"
+    "createFirst": "Create your first invoice",
+    "filters": "Filters",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "all": "All",
+    "deliveryPickup": "Upcoming Deliveries & Pickups",
+    "pendingTasks": "You have {count} pending tasks",
+    "deliveries": "Deliveries",
+    "pickups": "Pickups",
+    "avgInvoiceValue": "Avg. Invoice Value",
+    "totalQuotes": "Total Quotes",
+    "accepted": "accepted",
+    "converted": "converted",
+    "clientsThisMonth": "this month",
+    "invoices": "invoices",
+    "newClients": "New Clients"
+  },
+  "deliveries": {
+    "title": "Deliveries & Pickups",
+    "subtitle": "Manage deliveries and pickups",
+    "deliveries": "Deliveries",
+    "pickups": "Pickups",
+    "all": "All",
+    "pending": "Pending",
+    "completed": "Completed",
+    "markComplete": "Mark complete"
   },
   "invoices": {
     "title": "Invoices",
@@ -102,7 +142,18 @@
     "createTitle": "New Quote",
     "converted": "Converted to Invoice",
     "noQuotes": "No quotes yet",
-    "createFirst": "Create your first quote"
+    "createFirst": "Create your first quote",
+    "quote": "Quote"
+  },
+  "whatsapp": {
+    "greeting": "Here is the quote",
+    "pdfDownloaded": "The PDF has been downloaded. Please send it as an attachment on WhatsApp.",
+    "delivery": "Delivery",
+    "pickup": "Pickup",
+    "rentalDays": "Rental days",
+    "total": "TOTAL",
+    "eventType": "Event Type",
+    "location": "Location"
   },
   "settings": {
     "title": "Settings",
@@ -134,5 +185,19 @@
     "lastMonth": "Last Month",
     "yearToDate": "Year to Date",
     "vsLastMonth": "vs Last Month"
+  },
+  "alerts": {
+    "overdue": "Overdue",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "upcoming": "Upcoming"
+  },
+  "events": {
+    "fiestaInfantil": "Kids Party",
+    "eventoCorporativo": "Corporate Event",
+    "boda": "Wedding",
+    "reunionFamiliar": "Family Reunion",
+    "eventoEscolar": "School Event",
+    "otro": "Other"
   }
 }

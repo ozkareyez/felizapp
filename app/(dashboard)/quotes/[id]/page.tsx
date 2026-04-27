@@ -93,18 +93,18 @@ export default function QuoteDetailPage() {
   }
 
   const shareOnWhatsApp = async () => {
-    const fileName = `Cotizacion-${quote.reference || quote.quote_number || 'FELIZ'}.pdf`
+    const fileName = `${t("quotes.quote")}-${quote.reference || quote.quote_number || 'FELIZ'}.pdf`
     await generateQuotePDF(quote, items, client, rentalDays)
     setTimeout(() => {
-      let text = `*COTIZACIÓN ${quote.reference || quote.quote_number}*\n\n`
-      if (client?.name) text += `*Cliente:* ${client.name}\n`
-      if (quote.event_type) text += `*Tipo de Evento:* ${quote.event_type}\n`
-      if (quote.event_location) text += `*Ubicación:* ${quote.event_location}\n`
-      if (quote.delivery_date) text += `*Entrega:* ${formatDateISO(quote.delivery_date)}\n`
-      if (quote.pickup_date) text += `*Recogida:* ${formatDateISO(quote.pickup_date)}\n`
-      if (rentalDays) text += `*Días de alquiler:* ${rentalDays}\n\n`
-      text += `*TOTAL: AWG ${quote.total || subtotal}*\n\n`
-      text += `El PDF se ha descargado. Por favor, envíalo como documento adjunto en WhatsApp.\n\n`
+      let text = `*${t("quotes.title").toUpperCase()} ${quote.reference || quote.quote_number}*\n\n`
+      if (client?.name) text += `*${t("invoices.client")}:* ${client.name}\n`
+      if (quote.event_type) text += `*${t("whatsapp.eventType")}:* ${quote.event_type}\n`
+      if (quote.event_location) text += `*${t("whatsapp.location")}:* ${quote.event_location}\n`
+      if (quote.delivery_date) text += `*${t("whatsapp.delivery")}:* ${formatDateISO(quote.delivery_date)}\n`
+      if (quote.pickup_date) text += `*${t("whatsapp.pickup")}:* ${formatDateISO(quote.pickup_date)}\n`
+      if (rentalDays) text += `*${t("whatsapp.rentalDays")}:* ${rentalDays}\n\n`
+      text += `*${t("whatsapp.total")}: AWG ${quote.total || subtotal}*\n\n`
+      text += `${t("whatsapp.pdfDownloaded")}\n\n`
       text += `FELIZ ENTERPRISE - Aruba`
       
       const url = `https://wa.me/?text=${encodeURIComponent(text)}`
