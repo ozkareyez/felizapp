@@ -59,13 +59,6 @@ export default function CreateQuotePage() {
     }
   }
 
-  const removeItem = (index) => {
-    if (items.length > 1) {
-      const newItems = items.filter((_, i) => i !== index)
-      setItems(newItems)
-    }
-  }
-
   const updateItem = (index, field, value) => {
     const newItems = [...items]
     newItems[index][field] = value
