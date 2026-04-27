@@ -51,8 +51,20 @@ export default function ProductsPage() {
 
   const getCategoryLabel = (cat) => {
     const labels = {
-      Chairs: "Sillas", Tables: "Mesas", Inflatables: "Inflables",
-      Equipment: "Equipos", Tents: "Carpas", Photo: "Foto", Other: "Otros"
+      Sillas: t("products.chairs"),
+      Mesas: t("products.tables"),
+      Inflables: t("products.inflatables"),
+      Equipos: t("products.equipment"),
+      Carpas: t("products.tents"),
+      Foto: t("products.photo"),
+      Otros: t("products.other"),
+      Chairs: t("products.chairs"),
+      Tables: t("products.tables"),
+      Inflatables: t("products.inflatables"),
+      Equipment: t("products.equipment"),
+      Tents: t("products.tents"),
+      Photo: t("products.photo"),
+      Other: t("products.other")
     }
     return labels[cat] || cat
   }

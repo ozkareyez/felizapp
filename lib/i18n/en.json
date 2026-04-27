@@ -64,7 +64,11 @@
     "converted": "converted",
     "clientsThisMonth": "this month",
     "invoices": "invoices",
-    "newClients": "New Clients"
+    "newClients": "New Clients",
+    "exportExcel": "Export Excel",
+    "apply": "Apply",
+    "from": "From",
+    "to": "To"
   },
   "deliveries": {
     "title": "Deliveries & Pickups",
@@ -140,7 +144,14 @@
     "createTitle": "New Product",
     "noProducts": "No products yet",
     "addProduct": "Add product to use in invoices",
-    "searchProduct": "Search product..."
+    "searchProduct": "Search product...",
+    "chairs": "Chairs",
+    "tables": "Tables",
+    "inflatables": "Inflatables",
+    "equipment": "Equipment",
+    "tents": "Tents",
+    "photo": "Photo",
+    "other": "Other"
   },
   "quotes": {
     "title": "Quotes",
@@ -171,6 +182,16 @@
     "convert": "Convert",
     "notes": "Notes",
     "quote": "Quote"
+  },
+  "whatsapp": {
+    "greeting": "Here is the quote",
+    "pdfDownloaded": "The PDF has been downloaded. Please send it as an attachment on WhatsApp.",
+    "delivery": "Delivery",
+    "pickup": "Pickup",
+    "rentalDays": "Rental days",
+    "total": "TOTAL",
+    "eventType": "Event Type",
+    "location": "Location"
   },
   "settings": {
     "title": "Settings",
@@ -274,5 +295,29 @@
     "reunionFamiliar": "Family Reunion",
     "eventoEscolar": "School Event",
     "otro": "Other"
+  },
+  "pdf": {
+    "invoice": "INVOICE",
+    "quote": "QUOTE",
+    "client": "CLIENT",
+    "eventDetails": "EVENT DETAILS",
+    "description": "Description",
+    "quantity": "Qty",
+    "unitPrice": "Unit Price",
+    "amount": "Amount",
+    "total": "TOTAL",
+    "bankData": "BANK DETAILS",
+    "bank": "Bank",
+    "account": "Account No.",
+    "accountHolder": "Account Holder",
+    "validUntil": "Valid until",
+    "delivery": "Delivery",
+    "pickup": "Pickup",
+    "rentalDays": "Rental days",
+    "eventType": "Event Type",
+    "location": "Location",
+    "noDescription": "No description",
+    "invoiceTitle": "Invoice",
+    "quoteTitle": "Quote"
   }
 }

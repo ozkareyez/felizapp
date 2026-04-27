@@ -289,9 +289,9 @@ export default function DashboardPage() {
 
   const statCards = [
     { label: t("dashboard.totalInvoices"), value: stats.totalInvoices, icon: FileText, color: "blue" },
-    { label: t("dashboard.totalClients"), value: stats.totalClients, icon: Users, color: "violet", sub: `+${stats.newClientsThisMonth} this month` },
+    { label: t("dashboard.totalClients"), value: stats.totalClients, icon: Users, color: "violet", sub: `+${stats.newClientsThisMonth} ${t("dashboard.clientsThisMonth")}` },
     { label: t("dashboard.revenue"), value: formatCurrency(stats.totalRevenue), icon: DollarSign, color: "emerald", trend: stats.revenueGrowth },
-    { label: t("dashboard.pending"), value: formatCurrency(stats.pendingAmount), icon: Clock, color: "amber", sub: `${stats.pendingInvoices} invoices` }
+    { label: t("dashboard.pending"), value: formatCurrency(stats.pendingAmount), icon: Clock, color: "amber", sub: `${stats.pendingInvoices} ${t("dashboard.invoices")}` }
   ]
 
   const colorMap = { blue: "#3b82f6", violet: "#8b5cf6", emerald: "#10b981", amber: "#f59e0b" }
@@ -302,20 +302,20 @@ export default function DashboardPage() {
       <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex flex-wrap gap-2">
-            <button onClick={() => applyPreset("today")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "today" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>Hoy</button>
-            <button onClick={() => applyPreset("week")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "week" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>Semana</button>
-            <button onClick={() => applyPreset("month")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "month" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>Mes</button>
-            <button onClick={() => applyPreset("all")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "all" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>Todo</button>
+            <button onClick={() => applyPreset("today")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "today" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.today")}</button>
+            <button onClick={() => applyPreset("week")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "week" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisWeek")}</button>
+            <button onClick={() => applyPreset("month")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "month" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisMonth")}</button>
+            <button onClick={() => applyPreset("all")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "all" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.all")}</button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-500">Desde:</span>
+            <span className="text-sm text-slate-500">{t("dashboard.from")}:</span>
             <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); applyFilters(e.target.value, dateTo) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-500">Hasta:</span>
+            <span className="text-sm text-slate-500">{t("dashboard.to")}:</span>
             <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); applyFilters(dateFrom, e.target.value) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" />
           </div>
-          <button onClick={applyFilters} className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">Aplicar</button>
+          <button onClick={applyFilters} className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">{t("dashboard.apply")}</button>
         </div>
       </div>
 
@@ -329,7 +329,7 @@ export default function DashboardPage() {
           className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition"
         >
           <Download className="w-4 h-4" />
-          Export Excel
+          {t("dashboard.exportExcel")}
         </button>
       </div>
 

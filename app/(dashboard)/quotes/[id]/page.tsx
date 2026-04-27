@@ -10,7 +10,7 @@ import { useI18n } from "@/lib/i18n"
 import { generateQuotePDF } from "@/lib/pdf-generator"
 
 export default function QuoteDetailPage() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const { id } = useParams()
   const [quote, setQuote] = useState(null)
   const [items, setItems] = useState([])
@@ -94,7 +94,7 @@ export default function QuoteDetailPage() {
 
   const shareOnWhatsApp = async () => {
     const fileName = `${t("quotes.quote")}-${quote.reference || quote.quote_number || 'FELIZ'}.pdf`
-    await generateQuotePDF(quote, items, client, rentalDays)
+    await generateQuotePDF(quote, items, client, rentalDays, locale)
     setTimeout(() => {
       let text = `*${t("quotes.title").toUpperCase()} ${quote.reference || quote.quote_number}*\n\n`
       if (client?.name) text += `*${t("invoices.client")}:* ${client.name}\n`
@@ -283,7 +283,7 @@ export default function QuoteDetailPage() {
               </Link>
             )}
             <button 
-              onClick={() => generateQuotePDF(quote, items, client, rentalDays)}
+              onClick={() => generateQuotePDF(quote, items, client, rentalDays, locale)}
               className="inline-flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-800 transition"
             >
               <Download className="w-4 h-4" />

@@ -7,9 +7,10 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Edit, Download } from "lucide-react"
 import { generateInvoicePDF } from "@/lib/pdf-generator"
+import { useI18n } from "@/lib/i18n"
 
 export default function InvoiceDetailPage() {
-  const { id } = useParams()
+  const { t, locale } = useI18n()
   const [invoice, setInvoice] = useState(null)
   const [items, setItems] = useState([])
   const [client, setClient] = useState(null)
@@ -197,7 +198,7 @@ export default function InvoiceDetailPage() {
             Editar
           </Link>
           <button 
-            onClick={() => generateInvoicePDF(invoice, items, client, rentalDays)}
+            onClick={() => generateInvoicePDF(invoice, items, client, rentalDays, locale)}
             className="inline-flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-800 transition"
           >
             <Download className="w-4 h-4" />
