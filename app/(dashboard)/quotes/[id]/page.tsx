@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Edit, FileCheck, Download, Trash2, MessageCircle } from "lucide-react"
+import { ArrowLeft, Edit, FileCheck, Download, Trash2, MessageCircle, Check, X } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { generateQuotePDF } from "@/lib/pdf-generator"
 
@@ -110,6 +110,17 @@ export default function QuoteDetailPage() {
       const url = `https://wa.me/?text=${encodeURIComponent(text)}`
       window.open(url, '_blank')
     }, 1500)
+  }
+
+  const approveQuote = async () => {
+    await supabase.from("quotes").update({ status: "accepted" }).eq("id", id)
+    setQuote({ ...quote, status: "accepted" })
+  }
+
+  const rejectQuote = async () => {
+    if (!confirm("¿Rechazar esta cotización?")) return
+    await supabase.from("quotes").update({ status: "rejected" }).eq("id", id)
+    setQuote({ ...quote, status: "rejected" })
   }
 
   const getStatusStyle = (status) => {
@@ -245,10 +256,24 @@ export default function QuoteDetailPage() {
 
         <div className="p-6 bg-slate-50 border-t border-slate-200 flex flex-wrap gap-3 justify-between items-center">
           <div className="flex gap-3">
-            <Link href={`/quotes/${id}/edit`} className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition">
-              <Edit className="w-4 h-4" />
-              {t("common.edit")}
-            </Link>
+            {quote.status === "pending" && (
+              <>
+                <button onClick={approveQuote} className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition">
+                  <Check className="w-4 h-4" />
+                  Aprobar
+                </button>
+                <button onClick={rejectQuote} className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition">
+                  <X className="w-4 h-4" />
+                  Rechazar
+                </button>
+              </>
+            )}
+            {quote.status !== "pending" && (
+              <Link href={`/quotes/${id}/edit`} className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition">
+                <Edit className="w-4 h-4" />
+                {t("common.edit")}
+              </Link>
+            )}
           </div>
           <div className="flex gap-3">
             {quote.status !== "converted" && (
