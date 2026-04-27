@@ -11,6 +11,7 @@ import { useI18n } from "@/lib/i18n"
 
 export default function InvoiceDetailPage() {
   const { t, locale } = useI18n()
+  const { id } = useParams()
   const [invoice, setInvoice] = useState(null)
   const [items, setItems] = useState([])
   const [client, setClient] = useState(null)
