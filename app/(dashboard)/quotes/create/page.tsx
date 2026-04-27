@@ -13,7 +13,7 @@ export default function CreateQuotePage() {
   const [clients, setClients] = useState([])
   const [products, setProducts] = useState([])
   const [clientId, setClientId] = useState("")
-  const [items, setItems] = useState([{ product_id: "", description: "", quantity: 1, price: 0 }])
+  const [items, setItems] = useState([{ product_id: "", description: "", quantity: "", price: "" }])
   const [rentalDays, setRentalDays] = useState(1)
   const [eventLocation, setEventLocation] = useState("")
   const [eventType, setEventType] = useState("")
@@ -49,7 +49,14 @@ export default function CreateQuotePage() {
   }
 
   const addItem = () => {
-    setItems([...items, { product_id: "", description: "", quantity: 1, price: 0 }])
+    setItems([...items, { product_id: "", description: "", quantity: "", price: "" }])
+  }
+
+  const removeItem = (index) => {
+    if (items.length > 1) {
+      const newItems = items.filter((_, i) => i !== index)
+      setItems(newItems)
+    }
   }
 
   const removeItem = (index) => {
@@ -68,7 +75,7 @@ export default function CreateQuotePage() {
       const product = products.find(p => p.id === value)
       if (product) {
         newItems[index].description = product.name
-        newItems[index].price = product.precio_dia || product.price
+        newItems[index].price = product.precio_dia || product.price || ""
       }
     }
 
@@ -85,7 +92,9 @@ export default function CreateQuotePage() {
 
   const getSubtotal = () => {
     return items.reduce((sum, item) => {
-      return sum + (item.quantity * item.price * rentalDays)
+      const qty = Number(item.quantity) || 0
+      const price = Number(item.price) || 0
+      return sum + (qty * price * rentalDays)
     }, 0)
   }
 
@@ -166,10 +175,12 @@ export default function CreateQuotePage() {
         }
       }
 
+      const validItems = items.filter(i => i.description && i.quantity)
+      
       const itemsToInsert = validItems.map((item) => ({
         description: item.description,
-        quantity: item.quantity,
-        unit_price: item.price,
+        quantity: Number(item.quantity) || 1,
+        unit_price: Number(item.price) || 0,
         quote_id: quote.id
       }))
 
@@ -310,16 +321,16 @@ export default function CreateQuotePage() {
                 type="number"
                 placeholder="Cant"
                 value={item.quantity}
-                onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                className="w-16 border border-slate-300 rounded-lg px-2 py-2 text-center bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onChange={(e) => updateItem(i, "quantity", e.target.value)}
+                className="w-14 sm:w-16 border border-slate-300 rounded-lg px-2 py-2 text-center bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                 min="1"
               />
               <input
                 type="number"
-                placeholder="Price"
+                placeholder="Precio"
                 value={item.price}
-                onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                className="w-24 border border-slate-300 rounded-lg px-3 py-2 text-right bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onChange={(e) => updateItem(i, "price", e.target.value)}
+                className="w-20 sm:w-24 border border-slate-300 rounded-lg px-2 py-2 text-right bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                 min="0"
               />
               <button onClick={() => removeItem(i)} className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg" disabled={items.length === 1}>

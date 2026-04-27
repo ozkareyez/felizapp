@@ -296,23 +296,23 @@ export default function DashboardPage() {
   return (
     <div className="p-2 md:p-6 max-w-7xl mx-auto">
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 overflow-x-auto">
-        <div className="flex flex-wrap items-center gap-4 min-w-max">
-          <div className="flex flex-wrap gap-2">
-            <button onClick={() => applyPreset("today")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "today" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.today")}</button>
-            <button onClick={() => applyPreset("week")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "week" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisWeek")}</button>
-            <button onClick={() => applyPreset("month")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "month" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisMonth")}</button>
-            <button onClick={() => applyPreset("all")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "all" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.all")}</button>
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6">
+        <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <button onClick={() => applyPreset("today")} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "today" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.today")}</button>
+            <button onClick={() => applyPreset("week")} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "week" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisWeek")}</button>
+            <button onClick={() => applyPreset("month")} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "month" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisMonth")}</button>
+            <button onClick={() => applyPreset("all")} className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "all" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.all")}</button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <span className="text-sm text-slate-500">{t("dashboard.from")}:</span>
-            <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); applyFilters(e.target.value, dateTo) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" />
+            <input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); applyFilters(e.target.value, dateTo) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm w-full sm:w-auto" />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <span className="text-sm text-slate-500">{t("dashboard.to")}:</span>
-            <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); applyFilters(dateFrom, e.target.value) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm" />
+            <input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); applyFilters(dateFrom, e.target.value) }} className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm w-full sm:w-auto" />
           </div>
-          <button onClick={applyFilters} className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">{t("dashboard.apply")}</button>
+          <button onClick={applyFilters} className="w-full sm:w-auto px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">{t("dashboard.apply")}</button>
         </div>
       </div>
 

@@ -46,7 +46,7 @@ export default function DashboardLayout({ children }) {
     { href: "/dashboard", label: isHydrated ? t("nav.dashboard") : "Loading...", icon: LayoutDashboard },
     { href: "/invoices", label: isHydrated ? t("nav.invoices") : "Loading...", icon: FileText },
     { href: "/quotes", label: isHydrated ? t("nav.quotes") : "Loading...", icon: Quote },
-    { href: "/deliveries", label: isHydrated ? "Entregas" : "Loading...", icon: Truck, deliveryCount, pickupCount },
+    { href: "/deliveries", label: isHydrated ? t("nav.deliveries") : "Loading...", icon: Truck, deliveryCount, pickupCount },
     { href: "/clients", label: isHydrated ? t("nav.clients") : "Loading...", icon: Users },
     { href: "/products", label: isHydrated ? t("nav.products") : "Loading...", icon: Package },
     { href: "/settings", label: isHydrated ? t("nav.settings") : "Loading...", icon: Settings },

@@ -10,7 +10,7 @@ import { ArrowLeft, Plus, Trash2 } from "lucide-react"
 export default function CreateInvoicePage() {
   const [clients, setClients] = useState([])
   const [clientId, setClientId] = useState("")
-  const [items, setItems] = useState([{ description: "", quantity: 1, price: 0 }])
+  const [items, setItems] = useState([{ description: "", quantity: "", unit_price: "" }])
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -24,7 +24,7 @@ export default function CreateInvoicePage() {
   }
 
   const addItem = () => {
-    setItems([...items, { description: "", quantity: 1, price: 0 }])
+    setItems([...items, { description: "", quantity: "", unit_price: "" }])
   }
 
   const removeItem = (index) => {
@@ -40,7 +40,11 @@ export default function CreateInvoicePage() {
     setItems(newItems)
   }
 
-  const total = items.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+  const total = items.reduce((sum, item) => {
+    const qty = Number(item.quantity) || 0
+    const price = Number(item.unit_price) || 0
+    return sum + (qty * price)
+  }, 0)
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("es-ES", { style: "currency", currency: "AWG" }).format(amount || 0)
@@ -52,9 +56,9 @@ export default function CreateInvoicePage() {
       return
     }
 
-    const validItems = items.filter(i => i.description.trim() !== "")
+    const validItems = items.filter(i => i.description.trim() !== "" && i.quantity)
     if (validItems.length === 0) {
-      alert("Agrega al menos un item")
+      alert("Agrega al menos un item con cantidad")
       return
     }
 
@@ -98,8 +102,8 @@ export default function CreateInvoicePage() {
 
       const itemsToInsert = validItems.map((item) => ({
         description: item.description,
-        quantity: item.quantity,
-        unit_price: item.price,
+        quantity: Number(item.quantity) || 1,
+        unit_price: Number(item.unit_price) || 0,
         invoice_id: invoice.id
       }))
 
@@ -179,16 +183,16 @@ export default function CreateInvoicePage() {
                 type="number"
                 placeholder="Cant"
                 value={item.quantity}
-                onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                className="w-20 border border-slate-200 rounded-lg px-3 py-2.5 text-center bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                onChange={(e) => updateItem(i, "quantity", e.target.value)}
+                className="w-16 sm:w-20 border border-slate-200 rounded-lg px-2 py-2.5 text-center bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base"
                 min="1"
               />
               <input
                 type="number"
                 placeholder="Precio"
-                value={item.price}
-                onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                className="w-28 border border-slate-200 rounded-lg px-3 py-2.5 text-right bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                value={item.unit_price}
+                onChange={(e) => updateItem(i, "unit_price", e.target.value)}
+                className="w-24 sm:w-28 border border-slate-200 rounded-lg px-2 py-2.5 text-right bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base"
                 min="0"
                 step="0.01"
               />

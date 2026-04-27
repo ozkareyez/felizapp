@@ -16,7 +16,7 @@ export default function EditQuotePage() {
   const [clients, setClients] = useState([])
   const [products, setProducts] = useState([])
   const [clientId, setClientId] = useState("")
-  const [items, setItems] = useState([{ product_id: "", description: "", quantity: 1, price: 0 }])
+  const [items, setItems] = useState([{ product_id: "", description: "", quantity: "", price: "" }])
   const [validUntil, setValidUntil] = useState("")
   const [notes, setNotes] = useState("")
   const [loading, setLoading] = useState(false)

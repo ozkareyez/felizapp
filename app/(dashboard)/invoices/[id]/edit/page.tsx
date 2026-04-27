@@ -13,7 +13,7 @@ export default function EditInvoicePage() {
   const [invoice, setInvoice] = useState(null)
   const [clients, setClients] = useState([])
   const [clientId, setClientId] = useState("")
-  const [items, setItems] = useState([{ description: "", quantity: 1, price: 0 }])
+  const [items, setItems] = useState([{ description: "", quantity: "", unit_price: "" }])
   const [loading, setLoading] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
   const [showAdminModal, setShowAdminModal] = useState(false)
@@ -39,15 +39,15 @@ export default function EditInvoicePage() {
     if (itemsData && itemsData.length > 0) {
       setItems(itemsData.map(i => ({
         description: i.description,
-        quantity: i.quantity,
-        price: i.unit_price || i.price || 0
+        quantity: String(i.quantity),
+        unit_price: String(i.unit_price || i.price || 0)
       })))
     }
     setInitialLoad(false)
   }
 
   const addItem = () => {
-    setItems([...items, { description: "", quantity: 1, price: 0 }])
+    setItems([...items, { description: "", quantity: "", unit_price: "" }])
   }
 
   const removeItem = (index) => {
@@ -63,7 +63,11 @@ export default function EditInvoicePage() {
     setItems(newItems)
   }
 
-  const total = items.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+  const total = items.reduce((sum, item) => {
+    const qty = Number(item.quantity) || 0
+    const price = Number(item.unit_price) || 0
+    return sum + (qty * price)
+  }, 0)
 
   const verifyAdminAndSave = async () => {
     setAdminError("")
@@ -103,9 +107,9 @@ export default function EditInvoicePage() {
       return
     }
 
-    const validItems = items.filter(i => i.description.trim() !== "")
+    const validItems = items.filter(i => i.description.trim() !== "" && i.quantity)
     if (validItems.length === 0) {
-      alert("Agrega al menos un item")
+      alert("Agrega al menos un item con cantidad")
       return
     }
 
@@ -131,8 +135,8 @@ export default function EditInvoicePage() {
 
       const itemsToInsert = validItems.map((item) => ({
         description: item.description,
-        quantity: item.quantity,
-        unit_price: item.price,
+        quantity: Number(item.quantity) || 1,
+        unit_price: Number(item.unit_price) || 0,
         invoice_id: id
       }))
 
@@ -244,8 +248,8 @@ export default function EditInvoicePage() {
                         type="number"
                         placeholder="1"
                         value={item.quantity}
-                        onChange={(e) => updateItem(i, "quantity", Number(e.target.value))}
-                        className="w-full sm:w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        onChange={(e) => updateItem(i, "quantity", e.target.value)}
+                        className="w-20 sm:w-20 border border-slate-300 rounded-lg px-3 py-3 text-center text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                         min="1"
                       />
                     </div>
@@ -254,9 +258,9 @@ export default function EditInvoicePage() {
                       <input
                         type="number"
                         placeholder="0.00"
-                        value={item.price}
-                        onChange={(e) => updateItem(i, "price", Number(e.target.value))}
-                        className="w-full sm:w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={item.unit_price}
+                        onChange={(e) => updateItem(i, "unit_price", e.target.value)}
+                        className="w-24 sm:w-28 border border-slate-300 rounded-lg px-3 py-3 text-right text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                         min="0"
                         step="0.01"
                       />
