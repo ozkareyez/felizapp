@@ -80,7 +80,7 @@
     "title": "Invoices",
     "subtitle": "Manage your invoices",
     "newInvoice": "New Invoice",
-    "invoiceNumber": "Invoice #",
+    "invoiceNumber": "Number",
     "client": "Client",
     "amount": "Amount",
     "status": "Status",
@@ -103,7 +103,15 @@
     "pendingStatus": "Pending",
     "draft": "Draft",
     "editInvoice": "Edit Invoice",
-    "validUntil": "Valid Until"
+    "validUntil": "Valid Until",
+    "filterByStatus": "Filter by status",
+    "all": "All",
+    "searchInvoice": "Search invoice...",
+    "noInvoices": "No invoices yet",
+    "createFirst": "Create your first invoice",
+    "number": "Number",
+    "date": "Date",
+    "results": "invoice(s) found"
   },
   "clients": {
     "title": "Clients",
@@ -115,7 +123,10 @@
     "address": "Address",
     "createTitle": "New Client",
     "noClients": "No clients yet",
-    "addFirst": "Add your first client"
+    "addFirst": "Add your first client",
+    "searchClient": "Search client...",
+    "deleteConfirm": "Delete this client?",
+    "deleteError": "Error deleting"
   },
   "products": {
     "title": "Products",
@@ -123,10 +134,13 @@
     "newProduct": "New Product",
     "name": "Name",
     "price": "Price",
+    "dailyPrice": "Price/day",
     "description": "Description",
+    "category": "Category",
     "createTitle": "New Product",
     "noProducts": "No products yet",
-    "addProduct": "Add product to use in invoices"
+    "addProduct": "Add product to use in invoices",
+    "searchProduct": "Search product..."
   },
   "quotes": {
     "title": "Quotes",
@@ -143,17 +157,20 @@
     "converted": "Converted to Invoice",
     "noQuotes": "No quotes yet",
     "createFirst": "Create your first quote",
-    "quote": "Quote"
-  },
-  "whatsapp": {
-    "greeting": "Here is the quote",
-    "pdfDownloaded": "The PDF has been downloaded. Please send it as an attachment on WhatsApp.",
-    "delivery": "Delivery",
-    "pickup": "Pickup",
-    "rentalDays": "Rental days",
-    "total": "TOTAL",
+    "filterByStatus": "Filter by status",
+    "all": "All",
+    "searchQuote": "Search quote...",
+    "eventDetails": "Event Details",
     "eventType": "Event Type",
-    "location": "Location"
+    "eventLocation": "Location",
+    "deliveryDate": "Delivery Date",
+    "pickupDate": "Pickup Date",
+    "rentalDays": "Rental Days",
+    "downloadPdf": "Download PDF",
+    "shareWhatsApp": "Share WhatsApp",
+    "convert": "Convert",
+    "notes": "Notes",
+    "quote": "Quote"
   },
   "settings": {
     "title": "Settings",
@@ -161,7 +178,15 @@
     "companyName": "Company Name",
     "preferences": "Preferences",
     "notifications": "Notifications",
-    "darkMode": "Dark Mode"
+    "darkMode": "Dark Mode",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "companyRuc": "RUC",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "notificationAlert": "Receive delivery and pickup alerts"
   },
   "auth": {
     "login": "Login",
@@ -185,6 +210,56 @@
     "lastMonth": "Last Month",
     "yearToDate": "Year to Date",
     "vsLastMonth": "vs Last Month"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Business Overview",
+    "totalInvoices": "Total Invoices",
+    "totalClients": "Total Clients",
+    "revenue": "Revenue",
+    "pending": "Pending",
+    "recentInvoices": "Recent Invoices",
+    "quickActions": "Quick Actions",
+    "viewAll": "View All",
+    "noInvoices": "No invoices yet",
+    "createFirst": "Create your first invoice",
+    "filters": "Filters",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "all": "All",
+    "deliveryPickup": "Upcoming Deliveries & Pickups",
+    "pendingTasks": "You have {count} pending tasks",
+    "deliveries": "Deliveries",
+    "pickups": "Pickups",
+    "avgInvoiceValue": "Avg. Invoice Value",
+    "totalQuotes": "Total Quotes",
+    "accepted": "accepted",
+    "converted": "converted",
+    "clientsThisMonth": "this month",
+    "invoices": "invoices",
+    "newClients": "New Clients"
+  },
+  "deliveries": {
+    "title": "Deliveries & Pickups",
+    "subtitle": "Manage deliveries and pickups",
+    "deliveries": "Deliveries",
+    "pickups": "Pickups",
+    "all": "All",
+    "pending": "Pending",
+    "completed": "Completed",
+    "markComplete": "Mark complete"
+  },
+  "whatsapp": {
+    "greeting": "Here is the quote",
+    "pdfDownloaded": "The PDF has been downloaded. Please send it as an attachment on WhatsApp.",
+    "delivery": "Delivery",
+    "pickup": "Pickup",
+    "rentalDays": "Rental days",
+    "total": "TOTAL",
+    "eventType": "Event Type",
+    "location": "Location"
   },
   "alerts": {
     "overdue": "Overdue",

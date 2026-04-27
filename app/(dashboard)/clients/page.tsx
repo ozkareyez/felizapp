@@ -5,8 +5,10 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import Link from "next/link"
 import { Mail, Phone, MapPin, Users, Trash2 } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 export default function ClientsPage() {
+  const { t } = useI18n()
   const [clients, setClients] = useState([])
 
   const getClients = async () => {
@@ -23,11 +25,11 @@ export default function ClientsPage() {
   }
 
   const deleteClient = async (id) => {
-    if (!confirm("¿Eliminar este cliente?")) return
+    if (!confirm(t("clients.deleteConfirm"))) return
     
     const { error } = await supabase.from("clients").delete().eq("id", id)
     if (error) {
-      alert("Error al eliminar")
+      alert(t("clients.deleteError"))
     } else {
       getClients()
     }
@@ -47,15 +49,15 @@ export default function ClientsPage() {
     <div className="p-2 md:p-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Clientes</h1>
-          <p className="text-slate-500 mt-1">Gestiona tu base de clientes</p>
+          <h1 className="text-3xl font-bold text-slate-900">{t("clients.title")}</h1>
+          <p className="text-slate-500 mt-1">{t("clients.subtitle")}</p>
         </div>
         <Link 
           href="/clients/create"
           className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-600/25"
         >
           <span className="text-lg">+</span>
-          Nuevo Cliente
+          {t("clients.newClient")}
         </Link>
       </div>
 

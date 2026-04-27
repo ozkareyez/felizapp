@@ -80,7 +80,7 @@
     "title": "Facturas",
     "subtitle": "Gestiona tus facturas",
     "newInvoice": "Nueva Factura",
-    "invoiceNumber": "Factura #",
+    "invoiceNumber": "Número",
     "client": "Cliente",
     "amount": "Monto",
     "status": "Estado",
@@ -106,7 +106,12 @@
     "validUntil": "Válido hasta",
     "filterByStatus": "Filtrar por estado",
     "all": "Todos",
-    "searchInvoice": "Buscar factura..."
+    "searchInvoice": "Buscar factura...",
+    "noInvoices": "No hay facturas todavía",
+    "createFirst": "Crea tu primera factura",
+    "number": "Número",
+    "date": "Fecha",
+    "results": "factura(s) encontrada(s)"
   },
   "clients": {
     "title": "Clientes",
@@ -119,7 +124,9 @@
     "createTitle": "Nuevo Cliente",
     "noClients": "No hay clientes todavía",
     "addFirst": "Agrega tu primer cliente",
-    "searchClient": "Buscar cliente..."
+    "searchClient": "Buscar cliente...",
+    "deleteConfirm": "¿Eliminar este cliente?",
+    "deleteError": "Error al eliminar"
   },
   "products": {
     "title": "Productos",
@@ -181,7 +188,15 @@
     "companyName": "Nombre de la empresa",
     "preferences": "Preferencias",
     "notifications": "Notificaciones",
-    "darkMode": "Modo Oscuro"
+    "darkMode": "Modo Oscuro",
+    "save": "Guardar Cambios",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "companyRuc": "RUC",
+    "email": "Email",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "notificationAlert": "Recibir alertas de entregas y recolecciones"
   },
   "auth": {
     "login": "Iniciar Sesión",

@@ -5,8 +5,10 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import Link from "next/link"
 import { FileText, Eye, Pencil, Plus, Search, Filter, ChevronLeft, ChevronRight } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 export default function InvoicesPage() {
+  const { t } = useI18n()
   const [invoices, setInvoices] = useState([])
   const [clients, setClients] = useState({})
   const [search, setSearch] = useState("")
@@ -80,9 +82,9 @@ export default function InvoicesPage() {
 
   const getStatusStyle = (status) => {
     switch(status) {
-      case "paid": return { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", label: "Pagada" }
-      case "pending": return { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", label: "Pendiente" }
-      default: return { bg: "bg-slate-50", text: "text-slate-600", border: "border-slate-200", label: "Borrador" }
+      case "paid": return { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", label: t("invoices.paid") }
+      case "pending": return { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", label: t("invoices.pendingStatus") }
+      default: return { bg: "bg-slate-50", text: "text-slate-600", border: "border-slate-200", label: t("invoices.draft") }
     }
   }
 
@@ -90,15 +92,15 @@ export default function InvoicesPage() {
     <div className="p-2 md:p-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Facturas</h1>
-          <p className="text-slate-500 mt-1">Gestiona todas tus facturas</p>
+          <h1 className="text-3xl font-bold text-slate-900">{t("invoices.title")}</h1>
+          <p className="text-slate-500 mt-1">{t("invoices.subtitle")}</p>
         </div>
         <Link 
           href="/invoices/create"
           className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-600/25"
         >
           <span className="text-lg">+</span>
-          Nueva Factura
+          {t("invoices.newInvoice")}
         </Link>
       </div>
 
@@ -108,7 +110,7 @@ export default function InvoicesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Buscar por cliente o número..."
+            placeholder={t("invoices.searchInvoice")}
             value={search}
             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -121,16 +123,16 @@ export default function InvoicesPage() {
             onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
             className="border border-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="all">Todos</option>
-            <option value="pending">Pendiente</option>
-            <option value="paid">Pagada</option>
-            <option value="draft">Borrador</option>
+            <option value="all">{t("invoices.all")}</option>
+            <option value="pending">{t("invoices.pendingStatus")}</option>
+            <option value="paid">{t("invoices.paid")}</option>
+            <option value="draft">{t("invoices.draft")}</option>
           </select>
         </div>
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-slate-500 mb-4">{filteredInvoices.length} factura(s) encontrada(s)</p>
+      <p className="text-sm text-slate-500 mb-4">{filteredInvoices.length} {t("invoices.results")}</p>
 
       {/* Desktop Table */}
       <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -138,12 +140,12 @@ export default function InvoicesPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/50">
-                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Número</th>
-                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Cliente</th>
-                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Fecha</th>
-                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
-                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
-                <th className="px-5 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
+                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("invoices.number")}</th>
+                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("invoices.client")}</th>
+                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("invoices.date")}</th>
+                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("invoices.total")}</th>
+                <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("invoices.status")}</th>
+                <th className="px-5 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("common.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">

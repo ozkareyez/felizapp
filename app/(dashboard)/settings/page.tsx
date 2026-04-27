@@ -4,8 +4,10 @@
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase/client"
 import { Save, Bell, Building, User, CheckCircle } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 export default function SettingsPage() {
+  const { t } = useI18n()
   const [companyName, setCompanyName] = useState("FELIZ ENTERPRISE")
   const [companyEmail, setCompanyEmail] = useState("info@felizaruba.com")
   const [companyPhone, setCompanyPhone] = useState("+297 000-0000")
@@ -82,11 +84,11 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-slate-50 py-8">
       <div className="max-w-3xl mx-auto px-6">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Ajustes</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{t("settings.title")}</h1>
           {saved && (
             <div className="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-2 rounded-xl">
               <CheckCircle className="w-5 h-5" />
-              <span className="font-medium">Guardado</span>
+              <span className="font-medium">{t("settings.saved")}</span>
             </div>
           )}
         </div>
@@ -97,13 +99,13 @@ export default function SettingsPage() {
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-2">
                 <Building className="w-5 h-5 text-blue-600" />
-                <h2 className="text-lg font-semibold text-slate-900">Información de la Empresa</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{t("settings.companyInfo")}</h2>
               </div>
             </div>
             <div className="p-6 space-y-5">
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">Nombre de la Empresa</label>
+                  <label className="block text-sm font-semibold text-slate-700">{t("settings.companyName")}</label>
                   <input
                     type="text"
                     value={companyName}
@@ -112,19 +114,19 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">RUC</label>
+                  <label className="block text-sm font-semibold text-slate-700">{t("settings.companyRuc")}</label>
                   <input
                     type="text"
                     value={companyRuc}
                     onChange={(e) => setCompanyRuc(e.target.value)}
-                    placeholder="Número de registro"
+                    placeholder={t("settings.companyRuc")}
                     className="w-full border border-slate-200 rounded-xl px-4 py-3 bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">Email</label>
+                  <label className="block text-sm font-semibold text-slate-700">{t("settings.email")}</label>
                   <input
                     type="email"
                     value={companyEmail}
@@ -133,7 +135,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-700">Teléfono</label>
+                  <label className="block text-sm font-semibold text-slate-700">{t("settings.phone")}</label>
                   <input
                     type="tel"
                     value={companyPhone}
@@ -143,7 +145,7 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">Dirección</label>
+                <label className="block text-sm font-semibold text-slate-700">{t("settings.address")}</label>
                 <textarea
                   value={companyAddress}
                   onChange={(e) => setCompanyAddress(e.target.value)}
@@ -159,7 +161,7 @@ export default function SettingsPage() {
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-2">
                 <User className="w-5 h-5 text-blue-600" />
-                <h2 className="text-lg font-semibold text-slate-900">Preferencias</h2>
+                <h2 className="text-lg font-semibold text-slate-900">{t("settings.preferences")}</h2>
               </div>
             </div>
             <div className="p-6">
@@ -169,8 +171,8 @@ export default function SettingsPage() {
                     <Bell className="w-5 h-5 text-amber-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-slate-900">Notificaciones</p>
-                    <p className="text-sm text-slate-500">Recibir alertas de entregas y recolecciones</p>
+                    <p className="font-medium text-slate-900">{t("settings.notifications")}</p>
+                    <p className="text-sm text-slate-500">{t("settings.notificationAlert")}</p>
                   </div>
                 </div>
                 <button
@@ -192,12 +194,12 @@ export default function SettingsPage() {
             {saving ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Guardando...</span>
+                <span>{t("settings.saving")}</span>
               </>
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                <span>Guardar Cambios</span>
+                <span>{t("settings.save")}</span>
               </>
             )}
           </button>
