@@ -41,9 +41,6 @@ const getData = async (filters = {}) => {
 
   const pendingCount = filteredInvoices.filter(inv => inv.status === "pending").length
 
-  const allInvoices = allInvoicesResp.data || []
-  const allClients = allClientsResp.data || []
-
   // Monthly revenue data for chart (using filtered invoices)
   const monthlyData = {}
   const now = new Date()
@@ -299,8 +296,8 @@ export default function DashboardPage() {
   return (
     <div className="p-2 md:p-6 max-w-7xl mx-auto">
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 overflow-x-auto">
+        <div className="flex flex-wrap items-center gap-4 min-w-max">
           <div className="flex flex-wrap gap-2">
             <button onClick={() => applyPreset("today")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "today" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.today")}</button>
             <button onClick={() => applyPreset("week")} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${datePreset === "week" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t("dashboard.thisWeek")}</button>
@@ -319,17 +316,18 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="flex justify-between items-start mb-8">
-        <div>
+      <div className="flex justify-between items-start mb-8 gap-4">
+        <div className="min-w-0">
           <h1 className="text-3xl font-bold text-slate-900">{t("dashboard.title")}</h1>
           <p className="text-slate-500 mt-1">{t("dashboard.subtitle")}</p>
         </div>
         <button
           onClick={exportAllData}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition"
+          className="flex items-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition whitespace-nowrap text-sm"
         >
           <Download className="w-4 h-4" />
-          {t("dashboard.exportExcel")}
+          <span className="hidden sm:inline">{t("dashboard.exportExcel")}</span>
+          <span className="sm:hidden">Excel</span>
         </button>
       </div>
 

@@ -119,8 +119,8 @@ export default function DeliveriesPage() {
 
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
         {/* Tabs */}
-        <div className="border-b border-slate-200">
-          <div className="flex">
+        <div className="border-b border-slate-200 overflow-x-auto">
+          <div className="flex min-w-max">
             <button
               onClick={() => setActiveTab("delivery")}
               className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 font-medium transition ${

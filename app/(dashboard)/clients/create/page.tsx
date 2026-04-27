@@ -5,7 +5,7 @@ import { useState } from "react"
 import { supabase } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 
 export default function CreateClientPage() {
   const [name, setName] = useState("")
