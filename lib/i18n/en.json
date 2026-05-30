@@ -182,7 +182,15 @@
     "shareWhatsApp": "Share WhatsApp",
     "convert": "Convert",
     "notes": "Notes",
-    "quote": "Quote"
+    "quote": "Quote",
+    "selectClient": "Select a client",
+    "addProductFirst": "Add at least one product",
+    "createSuccess": "Quote {ref} created!",
+    "createError": "Could not create quote",
+    "selectEventType": "Select event type...",
+    "selectProduct": "Select product...",
+    "perDay": "/day",
+    "totalWithDays": "Total ({days} rental days)"
   },
   "whatsapp": {
     "greeting": "Here is the quote",

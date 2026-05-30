@@ -206,7 +206,15 @@
     "shareWhatsApp": "Compartir WhatsApp",
     "convert": "Convertir",
     "notes": "Notas",
-    "quote": "Cotización"
+    "quote": "Cotización",
+    "selectClient": "Selecciona un cliente",
+    "addProductFirst": "Agrega al menos un producto",
+    "createSuccess": "Cotización {ref} creada!",
+    "createError": "No se pudo crear la cotización",
+    "selectEventType": "Seleccionar tipo...",
+    "selectProduct": "Seleccionar producto...",
+    "perDay": "/día",
+    "totalWithDays": "Total ({days} días de alquiler)"
   },
   "whatsapp": {
     "greeting": "Aquí está la cotización",

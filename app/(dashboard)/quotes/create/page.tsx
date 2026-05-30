@@ -9,7 +9,7 @@ import { ArrowLeft, Plus, Trash2, Package, ChevronDown } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 
 export default function CreateQuotePage() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const [clients, setClients] = useState([])
   const [products, setProducts] = useState([])
   const [clientId, setClientId] = useState("")
@@ -39,9 +39,10 @@ export default function CreateQuotePage() {
   }
 
   const formatDateLocal = (dateStr) => {
-    if (!dateStr) return 'Sin fecha'
+    if (!dateStr) return ''
     const d = new Date(dateStr + 'T00:00:00')
-    return d.toLocaleDateString('es-ES')
+    if (isNaN(d.getTime())) return ''
+    return d.toLocaleDateString(locale === "en" ? "en-US" : "es-ES")
   }
 
   const formatCurrency = (amount) => {
@@ -63,7 +64,6 @@ export default function CreateQuotePage() {
     const newItems = [...items]
     newItems[index][field] = value
 
-    // If selecting a product, auto-fill from inventory
     if (field === "product_id" && value) {
       const product = products.find(p => p.id === value)
       if (product) {
@@ -75,7 +75,6 @@ export default function CreateQuotePage() {
     setItems(newItems)
   }
 
-  // Group products by category
   const productsByCategory = products.reduce((acc, p) => {
     const cat = p.categoria || "Other"
     if (!acc[cat]) acc[cat] = []
@@ -95,13 +94,13 @@ export default function CreateQuotePage() {
 
   const handleCreate = async () => {
     if (!clientId) {
-      alert("Selecciona un cliente")
+      alert(t("quotes.selectClient"))
       return
     }
 
     const validItems = items.filter(i => i.description && i.description.trim() !== "")
     if (validItems.length === 0) {
-      alert("Agrega al menos un producto")
+      alert(t("quotes.addProductFirst"))
       return
     }
 
@@ -148,7 +147,7 @@ export default function CreateQuotePage() {
       }
 
       if (!quote?.id) {
-        alert("No se pudo crear la cotización")
+        alert(t("quotes.createError"))
         setLoading(false)
         return
       }
@@ -188,44 +187,44 @@ export default function CreateQuotePage() {
         return
       }
 
-      alert(`Cotización ${reference} creada!`)
+      alert(t("quotes.createSuccess", { ref: reference }))
       router.push("/quotes")
     } catch (err) {
       console.error(err)
-      alert("Error inesperado")
+      alert(t("common.error") || "Error inesperado")
     } finally {
       setLoading(false)
     }
   }
 
   const eventTypes = [
-    "Fiesta Infantil",
-    "Evento Corporativo",
-    "Boda",
-    "Reunión Familiar",
-    "Evento Escolar",
-    "Otro"
+    "fiestaInfantil",
+    "eventoCorporativo",
+    "boda",
+    "reunionFamiliar",
+    "eventoEscolar",
+    "otro"
   ]
 
   return (
     <div className="p-2 md:p-8 max-w-5xl mx-auto">
       <div className="mb-6">
         <Link href="/quotes" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
-          <ArrowLeft className="w-4 h-4" />Back
+          <ArrowLeft className="w-4 h-4" />{t("common.back")}
         </Link>
       </div>
 
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">New Quote - Happy Events</h1>
+      <h1 className="text-3xl font-bold text-slate-900 mb-8">{t("quotes.createTitle")}</h1>
 
       {/* Client Selection */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
-        <h2 className="font-semibold text-slate-900 mb-4">Client Information</h2>
+        <h2 className="font-semibold text-slate-900 mb-4">{t("invoices.client")}</h2>
         <select
           value={clientId}
           onChange={(e) => setClientId(e.target.value)}
           className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="">Select a client...</option>
+          <option value="">{t("invoices.selectClient")}...</option>
           {clients.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
@@ -234,30 +233,30 @@ export default function CreateQuotePage() {
 
       {/* Event Details */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
-        <h2 className="font-semibold text-slate-900 mb-4">Fechas de Alquiler</h2>
+        <h2 className="font-semibold text-slate-900 mb-4">{t("quotes.rentalDays")}</h2>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Fecha de Entrega</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("quotes.deliveryDate")}</label>
             <input type="date" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Fecha de Recogida</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("quotes.pickupDate")}</label>
             <input type="date" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           </div>
         </div>
         <div className="mt-4 grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Tipo de Evento</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("quotes.eventType")}</label>
             <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <option value="">Seleccionar tipo...</option>
-              {eventTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
+              <option value="">{t("quotes.selectEventType")}</option>
+              {eventTypes.map(key => (
+                <option key={key} value={t("events." + key)}>{t("events." + key)}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Ubicación</label>
-            <input type="text" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} placeholder="Ubicación del evento" className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("quotes.eventLocation")}</label>
+            <input type="text" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} placeholder={t("quotes.eventLocation")} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           </div>
         </div>
       </div>
@@ -266,7 +265,7 @@ export default function CreateQuotePage() {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-slate-700 mb-2">Días de Alquiler</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("quotes.rentalDays")}</label>
             <input
               type="number"
               value={rentalDays}
@@ -276,8 +275,8 @@ export default function CreateQuotePage() {
             />
           </div>
           <div className="flex-1 text-sm text-slate-500">
-            <p>Entrega: {formatDateLocal(deliveryDate)}</p>
-            <p>Recogida: {formatDateLocal(pickupDate)}</p>
+            <p>{t("quotes.deliveryDate")}: {formatDateLocal(deliveryDate) || '—'}</p>
+            <p>{t("quotes.pickupDate")}: {formatDateLocal(pickupDate) || '—'}</p>
           </div>
         </div>
       </div>
@@ -285,9 +284,9 @@ export default function CreateQuotePage() {
       {/* Products Selection */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="font-semibold text-slate-900">Productos</h2>
+          <h2 className="font-semibold text-slate-900">{t("products.title")}</h2>
           <button onClick={addItem} className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm">
-            <Plus className="w-4 h-4" />Agregar Producto
+            <Plus className="w-4 h-4" />{t("invoices.addItem")}
           </button>
         </div>
 
@@ -300,11 +299,11 @@ export default function CreateQuotePage() {
                   onChange={(e) => updateItem(i, "product_id", e.target.value)}
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Seleccionar producto...</option>
+                  <option value="">{t("quotes.selectProduct")}</option>
                   {Object.entries(productsByCategory).map(([cat, prods]) => (
                     <optgroup key={cat} label={cat}>
                       {prods.map(p => (
-                        <option key={p.id} value={p.id}>{p.name} - {formatCurrency(p.precio_dia || p.price)}/día</option>
+                        <option key={p.id} value={p.id}>{p.name} - {formatCurrency(p.precio_dia || p.price)}{t("quotes.perDay")}</option>
                       ))}
                     </optgroup>
                   ))}
@@ -312,7 +311,7 @@ export default function CreateQuotePage() {
               </div>
               <input
                 type="number"
-                placeholder="Cant"
+                placeholder={t("invoices.quantity")}
                 value={item.quantity}
                 onChange={(e) => updateItem(i, "quantity", e.target.value)}
                 className="w-14 sm:w-16 border border-slate-300 rounded-lg px-2 py-2 text-center bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
@@ -320,7 +319,7 @@ export default function CreateQuotePage() {
               />
               <input
                 type="number"
-                placeholder="Precio"
+                placeholder={t("invoices.price")}
                 value={item.price}
                 onChange={(e) => updateItem(i, "price", e.target.value)}
                 className="w-20 sm:w-24 border border-slate-300 rounded-lg px-2 py-2 text-right bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
@@ -337,11 +336,11 @@ export default function CreateQuotePage() {
       {/* Valid Until & Notes */}
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <label className="block text-sm font-semibold text-slate-700 mb-3">Válido Hasta</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-3">{t("quotes.validUntil")}</label>
           <input type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <label className="block text-sm font-semibold text-slate-700 mb-3">Notas</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-3">{t("quotes.notes")}</label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="w-full border border-slate-300 rounded-xl px-4 py-3 bg-white text-slate-900 placeholder-slate-400 resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
         </div>
       </div>
@@ -349,13 +348,13 @@ export default function CreateQuotePage() {
       {/* Total */}
       <div className="rounded-2xl p-6 mb-8 text-white" style={{ background: 'linear-gradient(135deg, var(--rose), #b82070)' }}>
         <div className="flex justify-between items-center text-xl font-bold">
-          <span>Total ({rentalDays} días de alquiler)</span>
+          <span>{t("quotes.totalWithDays", { days: rentalDays })}</span>
           <span className="text-3xl font-bold">{formatCurrency(total)}</span>
         </div>
       </div>
 
       <button onClick={handleCreate} disabled={loading || !clientId} className="w-full py-4 rounded-xl font-semibold text-white disabled:opacity-50 transition-all" style={{ backgroundColor: 'var(--rose)' }}>
-        {loading ? "Creando..." : "Crear Cotización"}
+        {loading ? t("common.loading") : t("quotes.newQuote")}
       </button>
     </div>
   )
