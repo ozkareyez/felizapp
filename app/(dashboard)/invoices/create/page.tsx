@@ -208,7 +208,7 @@ export default function CreateInvoicePage() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-2xl p-6 mb-8 text-white">
+      <div className="rounded-2xl p-6 mb-8 text-white" style={{ background: 'linear-gradient(135deg, var(--rose), #b82070)' }}>
         <div className="flex justify-between items-center">
           <span className="text-lg font-medium">Total de la Factura</span>
           <span className="text-3xl font-bold">{formatCurrency(total)}</span>
@@ -218,7 +218,7 @@ export default function CreateInvoicePage() {
       <button
         onClick={handleCreate}
         disabled={loading || !clientId}
-        className="w-full bg-slate-900 text-white py-4 rounded-xl font-semibold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-full py-4 rounded-xl font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all" style={{ backgroundColor: 'var(--rose)' }}
       >
         {loading ? "Creando factura..." : "Crear Factura"}
       </button>

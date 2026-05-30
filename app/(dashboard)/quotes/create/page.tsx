@@ -347,14 +347,14 @@ export default function CreateQuotePage() {
       </div>
 
       {/* Total */}
-      <div className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-2xl p-6 mb-8 text-white">
+      <div className="rounded-2xl p-6 mb-8 text-white" style={{ background: 'linear-gradient(135deg, var(--rose), #b82070)' }}>
         <div className="flex justify-between items-center text-xl font-bold">
           <span>Total ({rentalDays} días de alquiler)</span>
           <span className="text-3xl font-bold">{formatCurrency(total)}</span>
         </div>
       </div>
 
-      <button onClick={handleCreate} disabled={loading || !clientId} className="w-full bg-slate-900 text-white py-4 rounded-xl font-semibold hover:bg-slate-800 disabled:opacity-50 transition-all">
+      <button onClick={handleCreate} disabled={loading || !clientId} className="w-full py-4 rounded-xl font-semibold text-white disabled:opacity-50 transition-all" style={{ backgroundColor: 'var(--rose)' }}>
         {loading ? "Creando..." : "Crear Cotización"}
       </button>
     </div>

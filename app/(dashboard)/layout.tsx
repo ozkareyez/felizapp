@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import { LayoutDashboard, FileText, Users, Package, Settings, Menu, X, Quote, ChevronDown, Truck, RotateCcw } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/LanguageSwitcher"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { supabase } from "@/lib/supabase/client"
 
 export default function DashboardLayout({ children }) {
@@ -24,12 +25,10 @@ export default function DashboardLayout({ children }) {
         .in("status", ["accepted", "converted"])
 
       if (quotes) {
-        // All pending deliveries (not completed)
         const deliveriesPending = quotes.filter(q => {
           return q.delivery_date && q.delivery_status !== 'completed'
         }).length
 
-        // All pending pickups (not completed)
         const pickupsPending = quotes.filter(q => {
           return q.pickup_date && q.pickup_status !== 'completed'
         }).length
@@ -61,8 +60,8 @@ export default function DashboardLayout({ children }) {
         onClick={() => setSidebarOpen(false)}
         className={`flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 ${
           isActive 
-            ? "bg-blue-50 text-blue-700 font-medium" 
-            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            ? "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-medium" 
+            : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-slate-200"
         }`}
       >
         <div className="flex items-center gap-3">
@@ -73,7 +72,7 @@ export default function DashboardLayout({ children }) {
           <div className="flex gap-1">
             {(deliveryCount > 0 || pickupCount > 0) && (
               <>
-                <span className="flex items-center gap-1 px-2 py-1 bg-blue-500 text-white text-xs font-bold rounded-lg min-w-[28px] justify-center">
+                <span className="flex items-center gap-1 px-2 py-1 bg-cyan-500 text-white text-xs font-bold rounded-lg min-w-[28px] justify-center">
                   <Truck className="w-3 h-3" />
                   {deliveryCount}
                 </span>
@@ -90,7 +89,7 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-[var(--background)] flex">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div 
@@ -101,19 +100,19 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 
+        fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)]
         transform transition-transform duration-200 lg:transform-none
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
       `}>
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-6 border-b border-[var(--sidebar-border)] flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2" onClick={() => setSidebarOpen(false)}>
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-emerald-400 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">FE</span>
             </div>
-            <span className="font-bold text-slate-900">FELIZ ENTERPRISE</span>
+            <span className="font-bold text-[var(--foreground)]">FELIZ ENTERPRISE</span>
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-1">
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-[var(--muted-foreground)]" />
           </button>
         </div>
 
@@ -122,7 +121,7 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <div className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl p-4 text-white">
+          <div className="bg-gradient-to-r from-cyan-600 to-emerald-500 rounded-xl p-4 text-white">
             <p className="text-sm font-medium">Professional Plan</p>
             <p className="text-xs opacity-80 mt-1">All features unlocked</p>
           </div>
@@ -132,8 +131,8 @@ export default function DashboardLayout({ children }) {
       {/* Main content */}
       <main className="flex-1 min-w-0">
         {/* Mobile header */}
-        <header className="lg:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between gap-2 sticky top-0 z-30">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 text-slate-600 relative">
+        <header className="lg:hidden bg-[var(--header-bg)] border-b border-[var(--header-border)] px-4 py-3 flex items-center justify-between gap-2 sticky top-0 z-30">
+          <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 text-[var(--muted-foreground)] relative">
             <Menu className="w-6 h-6" />
             {(deliveryCount > 0 || pickupCount > 0) && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
@@ -141,14 +140,16 @@ export default function DashboardLayout({ children }) {
               </span>
             )}
           </button>
-          <span className="font-bold text-slate-900 truncate">FELIZ ENTERPRISE</span>
+          <span className="font-bold text-[var(--foreground)] truncate">FELIZ ENTERPRISE</span>
           <div className="flex items-center gap-1">
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </header>
 
         {/* Desktop header */}
-        <header className="hidden lg:flex bg-white border-b border-slate-200 px-8 py-3 items-center justify-end gap-4 sticky top-0 z-30">
+        <header className="hidden lg:flex bg-[var(--header-bg)] border-b border-[var(--header-border)] px-8 py-3 items-center justify-end gap-4 sticky top-0 z-30">
+          <ThemeToggle />
           <LanguageSwitcher />
         </header>
 

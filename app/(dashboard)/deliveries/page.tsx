@@ -17,10 +17,6 @@ export default function DeliveriesPage() {
   const [filter, setFilter] = useState("pending")
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
   const fetchData = async () => {
     setLoading(true)
     const [{ data: quotesData }, { data: clientsData }] = await Promise.all([
@@ -48,6 +44,11 @@ export default function DeliveriesPage() {
     setPickupItems(pickups)
     setLoading(false)
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchData()
+  }, [])
 
   const formatDate = (date) => {
     if (!date) return ''

@@ -291,7 +291,8 @@ export default function DashboardPage() {
     { label: t("dashboard.pending"), value: formatCurrency(stats.pendingAmount), icon: Clock, color: "amber", sub: `${stats.pendingInvoices} ${t("dashboard.invoices")}` }
   ]
 
-  const colorMap = { blue: "#3b82f6", violet: "#8b5cf6", emerald: "#10b981", amber: "#f59e0b" }
+  const colorMap = { blue: "var(--icon-blue)", violet: "var(--icon-violet)", emerald: "var(--icon-emerald)", amber: "var(--icon-amber)" }
+  const colorBgMap = { blue: "var(--icon-bg-blue)", violet: "var(--icon-bg-violet)", emerald: "var(--icon-bg-emerald)", amber: "var(--icon-bg-amber)" }
 
   return (
     <div className="p-2 md:p-6 max-w-7xl mx-auto">
@@ -336,7 +337,7 @@ export default function DashboardPage() {
         {statCards.map((stat, i) => (
           <div key={stat.label} className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-5 hover:shadow-lg transition-all">
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br opacity-10 rounded-full -translate-y-1/2 translate-x-1/2" style={{ background: colorMap[stat.color] }} />
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${colorMap[stat.color]}20` }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: colorBgMap[stat.color] }}>
               <stat.icon className="w-5 h-5" style={{ color: colorMap[stat.color] }} />
             </div>
             <div className="flex items-center gap-1">
