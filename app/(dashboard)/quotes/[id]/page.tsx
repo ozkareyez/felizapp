@@ -32,7 +32,7 @@ export default function QuoteDetailPage() {
     return () => { isMounted = false }
   }, [id])
 
-  if (!quote) return <div className="p-8 flex items-center justify-center min-h-[400px]"><div className="text-muted-foreground">Cargando...</div></div>
+  if (!quote) return <div className="p-8 flex items-center justify-center min-h-[400px]"><div className="text-muted-foreground">{t("common.loading")}</div></div>
 
   const getRentalDays = () => {
     if (quote.rental_days) return quote.rental_days
@@ -80,7 +80,7 @@ export default function QuoteDetailPage() {
       if (rentalDays) text += `*${t("whatsapp.rentalDays")}:* ${rentalDays}\n\n`
       text += `*${t("whatsapp.total")}: AWG ${quote.total || subtotal}*\n\n`
       text += `${t("whatsapp.pdfDownloaded")}\n\n`
-      text += `FELIZ ENTERPRISE - Aruba`
+      text += `${t("common.brandName")} - Aruba`
       const url = `https://wa.me/?text=${encodeURIComponent(text)}`
       window.open(url, '_blank')
     }, 1500)
@@ -92,7 +92,7 @@ export default function QuoteDetailPage() {
   }
 
   const rejectQuote = async () => {
-    if (!confirm("¿Rechazar esta cotización?")) return
+    if (!confirm(t("quotes.rejectConfirm"))) return
     await supabase.from("quotes").update({ status: "rejected" }).eq("id", id)
     setQuote({ ...quote, status: "rejected" })
   }
@@ -112,7 +112,7 @@ export default function QuoteDetailPage() {
     bank: "CBA",
     account: "100102010",
     holder: "FELIZ ENTERPRISE",
-    method: "Transferencia bancaria"
+    method: t("quotes.transferMethod")
   }
 
   return (
@@ -162,8 +162,8 @@ export default function QuoteDetailPage() {
         <div className="invoice-header">
           <div className="invoice-header-top">
             <div>
-              <h1 className="invoice-header-title">COTIZACIÓN</h1>
-              <p className="invoice-header-sub">FELIZ ENTERPRISE</p>
+              <h1 className="invoice-header-title">{t("quotes.quoteLabel")}</h1>
+              <p className="invoice-header-sub">{t("common.brandName")}</p>
               <p className="invoice-header-number">
                 <Hash className="w-3 h-3 inline -mt-0.5 mr-1 opacity-60" />
                 {quote.quote_number || quote.reference || quote.id.slice(0, 8).toUpperCase()}
@@ -179,12 +179,12 @@ export default function QuoteDetailPage() {
           <div className="invoice-header-meta">
             <span className="invoice-meta-item">
               <Calendar />
-              Emitida: <strong>{formatDate(quote.created_at)}</strong>
+              {t("quotes.issued")} <strong>{formatDate(quote.created_at)}</strong>
             </span>
             {quote.valid_until && (
               <span className="invoice-meta-item">
                 <Calendar />
-                Válida hasta: <strong>{formatDate(quote.valid_until)}</strong>
+                {t("quotes.validUntilLabel")} <strong>{formatDate(quote.valid_until)}</strong>
               </span>
             )}
             <span className="invoice-meta-item">
@@ -198,7 +198,7 @@ export default function QuoteDetailPage() {
         <div className="px-8 py-5 border-t border-[var(--border)]">
           <div className="grid md:grid-cols-2 gap-5">
             <div className="party-card from">
-              <p className="invoice-section-label">DE</p>
+              <p className="invoice-section-label">{t("quotes.from")}</p>
               <p className="party-name">FELIZ ENTERPRISE</p>
               <p className="party-detail">
                 info@felizaruba.com<br />
@@ -207,7 +207,7 @@ export default function QuoteDetailPage() {
               </p>
             </div>
             <div className="party-card to">
-              <p className="invoice-section-label">PARA</p>
+              <p className="invoice-section-label">{t("quotes.to")}</p>
               {client ? (
                 <>
                   <p className="party-name">{client.name}</p>
@@ -228,34 +228,34 @@ export default function QuoteDetailPage() {
         {(quote.event_type || quote.event_location || quote.delivery_date || quote.pickup_date) && (
           <div className="px-8 py-5 border-t border-[var(--border)]">
             <div className="info-grid">
-              <p className="invoice-section-label">EVENTO</p>
+              <p className="invoice-section-label">{t("quotes.eventLabel")}</p>
               <div className="info-grid-items">
                 {quote.event_type && (
                   <div className="info-grid-item">
-                    <label><Tag className="w-3 h-3 inline mr-1" />Tipo</label>
+                    <label><Tag className="w-3 h-3 inline mr-1" />{t("quotes.typeLabel")}</label>
                     <span>{quote.event_type}</span>
                   </div>
                 )}
                 {quote.event_location && (
                   <div className="info-grid-item">
-                    <label><MapPin className="w-3 h-3 inline mr-1" />Ubicación</label>
+                    <label><MapPin className="w-3 h-3 inline mr-1" />{t("quotes.locationLabel")}</label>
                     <span>{quote.event_location}</span>
                   </div>
                 )}
                 {quote.delivery_date && (
                   <div className="info-grid-item">
-                    <label>Entrega</label>
+                    <label>{t("quotes.deliveryLabel")}</label>
                     <span>{formatDate(quote.delivery_date)}</span>
                   </div>
                 )}
                 {quote.pickup_date && (
                   <div className="info-grid-item">
-                    <label>Recogida</label>
+                    <label>{t("quotes.pickupLabel")}</label>
                     <span>{formatDate(quote.pickup_date)}</span>
                   </div>
                 )}
                 <div className="info-grid-item">
-                  <label>Días</label>
+                  <label>{t("quotes.daysLabel")}</label>
                   <span className="big">{rentalDays}</span>
                 </div>
               </div>
@@ -267,7 +267,7 @@ export default function QuoteDetailPage() {
         {quote.notes && (
           <div className="px-8 py-5 border-t border-[var(--border)]">
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'color-mix(in srgb, var(--secondary) 50%, transparent)', border: '1px solid var(--border)' }}>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">NOTAS</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{t("quotes.notesSection")}</p>
               <p className="text-sm text-foreground">{quote.notes}</p>
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function QuoteDetailPage() {
               <thead>
                 <tr>
                   <th>{t("invoices.description")}</th>
-                  <th className="text-center">Días</th>
+                  <th className="text-center">{t("quotes.daysColumn")}</th>
                   <th className="text-center">{t("invoices.quantity")}</th>
                   <th className="text-right">{t("invoices.price")}/día</th>
                   <th className="text-right">{t("invoices.total")}</th>
@@ -307,7 +307,7 @@ export default function QuoteDetailPage() {
           <div className="max-w-xs ml-auto">
             <div className="invoice-summary-box">
               <div className="invoice-summary-row">
-                <span className="invoice-summary-label">Días de alquiler</span>
+                <span className="invoice-summary-label">{t("quotes.rentalDaysSummary")}</span>
                 <span className="invoice-summary-value">{rentalDays}</span>
               </div>
               <div className="invoice-summary-row">
@@ -327,16 +327,16 @@ export default function QuoteDetailPage() {
           <div className="invoice-payment-box">
             <p className="invoice-payment-title">
               <Banknote className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
-              Datos de Pago
+              {t("quotes.paymentInfo")}
             </p>
             <div className="invoice-payment-grid">
-              <span className="key">Método</span>
+              <span className="key">{t("quotes.methodLabel")}</span>
               <span className="value">{bankInfo.method}</span>
-              <span className="key">Banco</span>
+              <span className="key">{t("quotes.bankLabel")}</span>
               <span className="value">{bankInfo.bank}</span>
-              <span className="key">No. Cuenta</span>
+              <span className="key">{t("quotes.accountNo")}</span>
               <span className="value">{bankInfo.account}</span>
-              <span className="key">Beneficiario</span>
+              <span className="key">{t("quotes.accountHolder")}</span>
               <span className="value">{bankInfo.holder}</span>
             </div>
           </div>
@@ -344,7 +344,7 @@ export default function QuoteDetailPage() {
 
         {/* ── THANK YOU ── */}
         <div className="px-8 py-4 border-t border-[var(--border)]">
-          <p className="invoice-thanks">Gracias por su confianza</p>
+          <p className="invoice-thanks">{t("quotes.thanks")}</p>
         </div>
 
         {/* ── ACTIONS ── */}
@@ -354,11 +354,11 @@ export default function QuoteDetailPage() {
               <>
                 <button onClick={approveQuote} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-white transition" style={{ backgroundColor: 'var(--success)' }}>
                   <Check className="w-4 h-4" />
-                  Aprobar
+                  {t("quotes.approve")}
                 </button>
                 <button onClick={rejectQuote} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-white transition" style={{ backgroundColor: '#ef4444' }}>
                   <X className="w-4 h-4" />
-                  Rechazar
+                  {t("quotes.reject")}
                 </button>
               </>
             )}
@@ -382,7 +382,7 @@ export default function QuoteDetailPage() {
               style={{ backgroundColor: 'var(--primary)' }}
             >
               <Download className="w-4 h-4" />
-              PDF
+              {t("quotes.pdf")}
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
             <button
@@ -391,7 +391,7 @@ export default function QuoteDetailPage() {
               style={{ backgroundColor: '#25D366' }}
             >
               <MessageCircle className="w-4 h-4" />
-              WhatsApp
+              {t("quotes.whatsapp")}
             </button>
           </div>
         </div>

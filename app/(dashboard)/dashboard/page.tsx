@@ -360,7 +360,7 @@ export default function DashboardPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
                 <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `AWG ${v}`} />
-                <Tooltip formatter={(value) => [formatCurrency(value), "Revenue"]} contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0" }} />
+                <Tooltip formatter={(value) => [formatCurrency(value), t("dashboard.revenue")]} contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0" }} />
                 <Line type="monotone" dataKey="amount" stroke="#2563eb" strokeWidth={3} dot={{ fill: "#2563eb", strokeWidth: 2, r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -402,10 +402,10 @@ export default function DashboardPage() {
         <div className="bg-white rounded-2xl border border-slate-200 p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center"><FileText className="w-5 h-5 text-violet-600" /></div>
-            <span className="text-sm text-slate-500">Total Quotes</span>
+            <span className="text-sm text-slate-500">{t("dashboard.totalQuotes")}</span>
           </div>
           <p className="text-2xl font-bold text-slate-900">{stats.totalQuotes}</p>
-          <p className="text-xs text-slate-400 mt-1">{stats.acceptedQuotes} accepted, {stats.convertedQuotes} converted</p>
+          <p className="text-xs text-slate-400 mt-1">{stats.acceptedQuotes} {t("dashboard.accepted")}, {stats.convertedQuotes} {t("dashboard.converted")}</p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 p-5">
           <div className="flex items-center gap-3 mb-3">
@@ -440,7 +440,7 @@ export default function DashboardPage() {
                       #{inv.invoice_number || inv.id.slice(0, 4)}
                     </div>
                     <div>
-                      <p className="font-medium text-slate-900 group-hover:text-blue-600">{clients[inv.client_id] || "Client"}</p>
+                      <p className="font-medium text-slate-900 group-hover:text-blue-600">{clients[inv.client_id] || t("common.name")}</p>
                       <p className="text-sm text-slate-400">{formatDate(inv.created_at)}</p>
                     </div>
                   </div>

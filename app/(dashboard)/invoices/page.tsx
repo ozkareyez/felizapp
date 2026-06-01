@@ -163,7 +163,7 @@ export default function InvoicesPage() {
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center text-violet-600 font-semibold text-xs">
                           {(clients[inv.client_id] || "C")[0].toUpperCase()}
                         </div>
-                        <span className="font-medium text-slate-900">{clients[inv.client_id] || "Cargando..."}</span>
+                        <span className="font-medium text-slate-900">{clients[inv.client_id] || t("common.loading")}</span>
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-500">{formatDate(inv.created_at)}</td>
@@ -197,8 +197,8 @@ export default function InvoicesPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
               <FileText className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No hay facturas</h3>
-            <p className="text-slate-500 mb-4">No se encontraron facturas con los filtros aplicados</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("invoices.noInvoices")}</h3>
+            <p className="text-slate-500 mb-4">{t("common.noResults")}</p>
           </div>
         )}
       </div>
@@ -225,7 +225,7 @@ export default function InvoicesPage() {
                   <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center text-violet-600 font-semibold text-xs">
                     {(clients[inv.client_id] || "C")[0].toUpperCase()}
                   </div>
-                  <span className="font-medium text-slate-900 text-sm">{clients[inv.client_id] || "Cliente"}</span>
+                  <span className="font-medium text-slate-900 text-sm">{clients[inv.client_id] || t("invoices.client")}</span>
                 </div>
                 <span className="font-semibold text-slate-900">{formatCurrency(inv.total)}</span>
               </div>
@@ -238,8 +238,8 @@ export default function InvoicesPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
               <FileText className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No hay facturas</h3>
-            <p className="text-slate-500 mb-4">No se encontraron resultados</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("invoices.noInvoices")}</h3>
+            <p className="text-slate-500 mb-4">{t("common.noResults")}</p>
           </div>
         )}
       </div>

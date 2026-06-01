@@ -251,7 +251,7 @@ export default function DeliveriesPage() {
                     <div className="flex items-center gap-4 mt-2 text-sm text-slate-600 flex-wrap">
                       <span className="flex items-center gap-1">
                         <User className="w-4 h-4" />
-                        {clients[item.client_id]?.name || 'Cliente'}
+                        {clients[item.client_id]?.name || t("common.name")}
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />

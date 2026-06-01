@@ -40,7 +40,7 @@ export default function ConvertQuotePage() {
 
   const handleConvert = async () => {
     if (quote?.status === "converted") {
-      alert("Esta cotización ya fue convertida")
+      alert(t("quotes.alreadyConverted"))
       return
     }
 
@@ -122,7 +122,7 @@ export default function ConvertQuotePage() {
       setResult({ success: true, invoiceNumber, invoiceId: invoice.id })
     } catch (err) {
       console.error(err)
-      setResult({ success: false, message: "Error inesperado" })
+      setResult({ success: false, message: t("common.unexpectedError") })
     } finally {
       setLoading(false)
     }
@@ -145,10 +145,10 @@ export default function ConvertQuotePage() {
             <CheckCircle className="w-8 h-8 text-blue-600" />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">{t("quotes.converted")}</h2>
-          <p className="text-slate-500 mb-6">Esta cotización ya fue convertida a factura.</p>
+          <p className="text-slate-500 mb-6">{t("quotes.alreadyConvertedMessage")}</p>
           <Link href={`/invoices`} className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition">
             <FileText className="w-5 h-5" />
-            Ver Facturas
+            {t("quotes.seeInvoices")}
           </Link>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function ConvertQuotePage() {
       )}
 
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
-        <h2 className="font-semibold text-slate-900 mb-4">Resumen de la Cotización</h2>
+        <h2 className="font-semibold text-slate-900 mb-4">{t("quotes.convertSummary")}</h2>
         
         <div className="grid md:grid-cols-2 gap-4 mb-6">
           <div className="p-4 bg-slate-50 rounded-xl">
@@ -183,7 +183,7 @@ export default function ConvertQuotePage() {
           </div>
           <div className="p-4 bg-slate-50 rounded-xl">
             <p className="text-sm text-slate-500 mb-1">{t("invoices.client")}</p>
-            <p className="font-semibold text-slate-900">{client?.name || "Cargando..."}</p>
+            <p className="font-semibold text-slate-900">{client?.name || t("common.loading")}</p>
           </div>
         </div>
 
@@ -220,8 +220,7 @@ export default function ConvertQuotePage() {
 
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
         <p className="text-amber-800">
-          <strong>Nota:</strong> Al convertir, se creará una nueva factura con el número de factura siguiente. 
-          La cotización cambiará a estado &quot;Convertida&quot;.
+          <strong>{t("common.info")}:</strong> {t("quotes.noteConvert")}
         </p>
       </div>
 
@@ -232,7 +231,7 @@ export default function ConvertQuotePage() {
           className="flex-1 bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
         >
           {loading ? (
-            "Convertiendo..."
+            t("quotes.converting")
           ) : (
             <>
               <FileText className="w-5 h-5" />
@@ -253,9 +252,9 @@ export default function ConvertQuotePage() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-green-900 mb-2">¡Factura Creada!</h2>
+          <h2 className="text-2xl font-bold text-green-900 mb-2">{t("quotes.invoiceCreated")}</h2>
           <p className="text-green-700 mb-4">
-            La cotización ha sido convertida a factura #{result.invoiceNumber}
+            {t("quotes.convertedSuccess", { number: result.invoiceNumber })}
           </p>
           <div className="flex gap-3 justify-center">
             <Link 
@@ -263,13 +262,13 @@ export default function ConvertQuotePage() {
               className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-green-700 transition"
             >
               <FileText className="w-5 h-5" />
-              Ver Factura
+              {t("quotes.viewInvoice")}
             </Link>
             <Link 
               href="/invoices" 
               className="inline-flex items-center gap-2 border border-green-300 text-green-700 px-6 py-3 rounded-xl font-medium hover:bg-green-100 transition"
             >
-              Ver Todas las Facturas
+              {t("quotes.viewAllInvoices")}
             </Link>
           </div>
         </div>

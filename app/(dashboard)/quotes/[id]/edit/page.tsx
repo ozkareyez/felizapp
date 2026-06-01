@@ -99,7 +99,7 @@ export default function EditQuotePage() {
     setAdminError("")
     
     if (!adminEmail || !adminPassword) {
-      setAdminError("Ingresa email y contraseña")
+      setAdminError(t("quotes.enterEmailPassword"))
       return
     }
 
@@ -111,12 +111,12 @@ export default function EditQuotePage() {
 
     if (signInError) {
       console.error("Auth error:", signInError.message)
-      setAdminError("Email o contraseña incorrectos")
+      setAdminError(t("quotes.invalidCredentials"))
       return
     }
 
     if (!signInData.user) {
-      setAdminError("Credenciales inválidas")
+      setAdminError(t("quotes.invalidCredentials"))
       return
     }
 
@@ -178,11 +178,11 @@ export default function EditQuotePage() {
         return
       }
 
-      alert("Cotización actualizada")
+      alert(t("quotes.updated"))
       router.push(`/quotes/${id}`)
     } catch (err) {
       console.error(err)
-      alert("Error inesperado")
+      alert(t("common.unexpectedError"))
     } finally {
       setLoading(false)
     }
@@ -231,7 +231,7 @@ export default function EditQuotePage() {
           onChange={(e) => setClientId(e.target.value)}
           className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
         >
-          <option value="">Elige un cliente...</option>
+          <option value="">{t("quotes.chooseClient")}</option>
           {clients.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
@@ -256,7 +256,7 @@ export default function EditQuotePage() {
                   onChange={(e) => updateItem(i, "product_id", e.target.value)}
                   className="w-full border border-slate-300 rounded-lg px-3 py-2.5 bg-white text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Seleccionar produto...</option>
+                  <option value="">{t("quotes.selectProduct")}</option>
                   {Object.entries(productsByCategory).map(([cat, prods]) => (
                     <optgroup key={cat} label={cat}>
                       {prods.map(p => (
@@ -274,7 +274,7 @@ export default function EditQuotePage() {
               />
               <div className="flex gap-2 w-full sm:w-auto items-end">
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Cant.</label>
+                  <label className="block text-xs text-slate-500 mb-1">{t("common.quantity")}</label>
                   <input
                     type="number"
                     placeholder="1"
@@ -285,7 +285,7 @@ export default function EditQuotePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Precio</label>
+                  <label className="block text-xs text-slate-500 mb-1">{t("common.price")}</label>
                   <input
                     type="number"
                     placeholder="0.00"
@@ -320,7 +320,7 @@ export default function EditQuotePage() {
           />
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <label className="block text-sm font-semibold text-slate-700 mb-3">Notas</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-3">{t("quotes.notesLabel")}</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -343,7 +343,7 @@ export default function EditQuotePage() {
           disabled={loading}
           className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 transition-all"
         >
-          {loading ? "Guardando..." : t("common.save")}
+          {loading ? t("quotes.saving") : t("common.save")}
         </button>
         <button
           onClick={() => router.push(`/quotes/${id}`)}
@@ -356,12 +356,12 @@ export default function EditQuotePage() {
       {showAdminModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Verificar Admin</h3>
-            <p className="text-sm text-slate-600 mb-4">Ingresa credenciales de admin para guardar cambios</p>
+            <h3 className="text-lg font-bold text-slate-900 mb-4">{t("quotes.adminVerification")}</h3>
+            <p className="text-sm text-slate-600 mb-4">{t("quotes.adminVerifyText")}</p>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Email Admin</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("quotes.adminEmail")}</label>
                 <input
                   type="email"
                   value={adminEmail}
@@ -371,7 +371,7 @@ export default function EditQuotePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">{t("quotes.adminPassword")}</label>
                 <input
                   type="password"
                   value={adminPassword}
@@ -390,7 +390,7 @@ export default function EditQuotePage() {
                   onClick={verifyAdminAndSave}
                   className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium"
                 >
-                  Confirmar
+                  {t("quotes.confirm")}
                 </button>
                 <button
                   onClick={() => {
@@ -401,7 +401,7 @@ export default function EditQuotePage() {
                   }}
                   className="flex-1 bg-slate-100 text-slate-700 py-2 rounded-lg font-medium"
                 >
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
               </div>
             </div>

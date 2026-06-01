@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Plus, Package } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 export default function CreateProductPage() {
   const [name, setName] = useState("")
@@ -16,6 +17,7 @@ export default function CreateProductPage() {
   const [loading, setLoading] = useState(false)
   const [created, setCreated] = useState(false)
   const router = useRouter()
+  const { t } = useI18n()
 
   const categorias = [
     "Sillas",
@@ -27,14 +29,24 @@ export default function CreateProductPage() {
     "Otros"
   ]
 
+  const categoryLabels = {
+    Sillas: "products.chairs",
+    Mesas: "products.tables",
+    Inflables: "products.inflatables",
+    Equipos: "products.equipment",
+    Carpas: "products.tents",
+    Foto: "products.photo",
+    Otros: "products.other"
+  }
+
   const handleCreate = async () => {
     if (!name.trim()) {
-      alert("El nombre es obligatorio")
+      alert(t("products.nameRequired"))
       return
     }
 
     if (!price || Number(price) <= 0) {
-      alert("El precio debe ser mayor a 0")
+      alert(t("products.priceRequired"))
       return
     }
 
@@ -69,11 +81,11 @@ export default function CreateProductPage() {
         <div className="flex items-center justify-between mb-8">
           <Link href="/products" className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition">
             <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">Volver</span>
+            <span className="font-medium">{t("products.backToList")}</span>
           </Link>
           <div className="flex items-center gap-2 text-slate-500">
             <Package className="w-5 h-5" />
-            <span className="text-sm">Nuevo Producto</span>
+            <span className="text-sm">{t("products.createTitle")}</span>
           </div>
         </div>
 
@@ -85,7 +97,7 @@ export default function CreateProductPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <span className="text-emerald-700 font-medium">Producto creado correctamente</span>
+            <span className="text-emerald-700 font-medium">{t("products.createdSuccess")}</span>
           </div>
         )}
 
@@ -93,8 +105,8 @@ export default function CreateProductPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           {/* Card Header */}
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-            <h1 className="text-xl font-bold text-slate-900">Crear Nuevo Producto</h1>
-            <p className="text-sm text-slate-500 mt-1">Agrega un nuevo producto a tu inventario</p>
+            <h1 className="text-xl font-bold text-slate-900">{t("products.createNew")}</h1>
+            <p className="text-sm text-slate-500 mt-1">{t("products.createSubtitle")}</p>
           </div>
 
           {/* Form */}
@@ -102,30 +114,30 @@ export default function CreateProductPage() {
             {/* Name Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">
-                Nombre del Producto <span className="text-red-500">*</span>
+                {t("products.name")} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white"
-                placeholder="Ej: Silla Tiffany Blanca"
+                placeholder={t("products.namePlaceholder")}
               />
             </div>
 
             {/* Category & Quantity */}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">Categoría</label>
+                <label className="block text-sm font-semibold text-slate-700">{t("products.category")}</label>
                 <div className="relative">
                   <select
                     value={categoria}
                     onChange={(e) => setCategoria(e.target.value)}
                     className="w-full appearance-none border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white pr-10"
                   >
-                    <option value="">Seleccionar...</option>
+                    <option value="">{t("products.selectCategory")}</option>
                     {categorias.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                      <option key={cat} value={cat}>{t(categoryLabels[cat])}</option>
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -137,7 +149,7 @@ export default function CreateProductPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">Cantidad en Inventario</label>
+                <label className="block text-sm font-semibold text-slate-700">{t("products.inventory")}</label>
                 <input
                   type="number"
                   value={cantidadTotal}
@@ -152,7 +164,7 @@ export default function CreateProductPage() {
             {/* Price */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-slate-700">
-                Precio por Día (AWG) <span className="text-red-500">*</span>
+                {t("products.dailyPrice")} (AWG) <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">AWG</div>
@@ -170,13 +182,13 @@ export default function CreateProductPage() {
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">Descripción</label>
+              <label className="block text-sm font-semibold text-slate-700">{t("products.description")}</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white resize-none"
-                placeholder="Descripción opcional del producto..."
+                placeholder={t("products.descriptionPlaceholder")}
               />
             </div>
           </div>
@@ -191,12 +203,12 @@ export default function CreateProductPage() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Creando...</span>
+                  <span>{t("products.creating")}</span>
                 </>
               ) : (
                 <>
                   <Plus className="w-5 h-5" />
-                  <span>Crear Producto</span>
+                  <span>{t("products.createProduct")}</span>
                 </>
               )}
             </button>
@@ -205,7 +217,7 @@ export default function CreateProductPage() {
               href="/products"
               className="px-6 py-3 border border-slate-200 rounded-xl font-medium text-slate-600 hover:bg-slate-50 text-center transition"
             >
-              Cancelar
+              {t("common.cancel")}
             </Link>
           </div>
         </div>

@@ -6,8 +6,10 @@ import { supabase } from "@/lib/supabase/client"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Plus, X } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 export default function EditInvoicePage() {
+  const { t } = useI18n()
   const { id } = useParams()
   const router = useRouter()
   const [invoice, setInvoice] = useState(null)
@@ -73,7 +75,7 @@ export default function EditInvoicePage() {
     setAdminError("")
     
     if (!adminEmail || !adminPassword) {
-      setAdminError("Ingresa email y contraseña")
+      setAdminError(t("invoices.enterEmailPassword"))
       return
     }
 
@@ -85,12 +87,12 @@ export default function EditInvoicePage() {
 
     if (signInError) {
       console.error("Auth error:", signInError.message)
-      setAdminError("Email o contraseña incorrectos")
+      setAdminError(t("invoices.invalidCredentials"))
       return
     }
 
     if (!signInData.user) {
-      setAdminError("Credenciales inválidas")
+      setAdminError(t("invoices.invalidCredentials"))
       return
     }
 
@@ -103,13 +105,13 @@ export default function EditInvoicePage() {
 
   const proceedWithUpdate = async () => {
     if (!clientId) {
-      alert("Selecciona un cliente")
+      alert(t("invoices.selectClientFirst"))
       return
     }
 
     const validItems = items.filter(i => i.description.trim() !== "" && i.quantity)
     if (validItems.length === 0) {
-      alert("Agrega al menos un item con cantidad")
+      alert(t("invoices.addItemWithQty"))
       return
     }
 
@@ -150,11 +152,11 @@ export default function EditInvoicePage() {
         return
       }
 
-      alert("Factura actualizada")
+      alert(t("invoices.updated"))
       router.push(`/invoices/${id}`)
     } catch (err) {
       console.error(err)
-      alert("Error inesperado")
+      alert(t("invoices.updateError"))
     } finally {
       setLoading(false)
     }
@@ -173,50 +175,50 @@ export default function EditInvoicePage() {
 
   const getStatusStyle = (status) => {
     switch(status) {
-      case "paid": return { bg: "bg-emerald-500", label: "Pagada" }
-      case "pending": return { bg: "bg-amber-500", label: "Pendiente" }
-      default: return { bg: "bg-slate-400", label: "Borrador" }
+      case "paid": return { bg: "bg-emerald-500", label: t("invoices.statusPaid") }
+      case "pending": return { bg: "bg-amber-500", label: t("invoices.statusPending") }
+      default: return { bg: "bg-slate-400", label: t("invoices.draft") }
     }
   }
 
-  const status = invoice ? getStatusStyle(invoice.status) : { bg: "bg-slate-400", label: "Borrador" }
+  const status = invoice ? getStatusStyle(invoice.status) : { bg: "bg-slate-400", label: t("invoices.draft") }
 
-  if (initialLoad) return <div className="p-8 flex items-center justify-center min-h-[400px]"><div className="text-slate-400">Cargando...</div></div>
+  if (initialLoad) return <div className="p-8 flex items-center justify-center min-h-[400px]"><div className="text-slate-400">{t("common.loading")}</div></div>
 
   return (
     <div className="p-2 md:p-8 max-w-4xl mx-auto">
       <div className="mb-6">
         <Link href={`/invoices/${id}`} className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-700 transition">
           <ArrowLeft className="w-4 h-4" />
-          Volver a factura
+          {t("invoices.backToList")}
         </Link>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
         <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Editar Factura #{invoice?.invoice_number || id.slice(0, 6).toUpperCase()}</h1>
+            <h1 className="text-2xl font-bold text-slate-900">{t("invoices.editTitle", { number: invoice?.invoice_number || id.slice(0, 6).toUpperCase() })}</h1>
           </div>
           <select
             value={invoice?.status || "pending"}
             onChange={(e) => handleStatusChange(e.target.value)}
             className={`px-4 py-2 rounded-lg border-2 font-medium cursor-pointer text-slate-900 bg-white ${invoice?.status === 'paid' ? 'border-emerald-500' : 'border-amber-500'}`}
           >
-            <option value="draft">Borrador</option>
-            <option value="pending">Pendiente</option>
-            <option value="paid">Pagada</option>
+            <option value="draft">{t("invoices.statusDraft")}</option>
+            <option value="pending">{t("invoices.statusPending")}</option>
+            <option value="paid">{t("invoices.statusPaid")}</option>
           </select>
         </div>
 
         <div className="p-6 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Cliente</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">{t("invoices.selectClient")}</label>
             <select
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
               className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">Seleccionar cliente</option>
+              <option value="">{t("invoices.chooseClient")}</option>
               {clients.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -225,10 +227,10 @@ export default function EditInvoicePage() {
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-slate-800">Items</h2>
+              <h2 className="font-semibold text-slate-800">{t("invoices.itemsLine")}</h2>
               <button onClick={addItem} className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
                 <Plus className="w-4 h-4" />
-                Agregar item
+                {t("invoices.addItem")}
               </button>
             </div>
 
@@ -236,14 +238,14 @@ export default function EditInvoicePage() {
               {items.map((item, i) => (
                 <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-start sm:items-center p-3 sm:p-0 bg-slate-50 sm:bg-transparent rounded-xl sm:rounded-none">
                   <input
-                    placeholder="Descripción del servicio"
+                    placeholder={t("invoices.descriptionPlaceholder")}
                     value={item.description}
                     onChange={(e) => updateItem(i, "description", e.target.value)}
                     className="flex-1 w-full border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                   <div className="flex gap-2 w-full sm:w-auto items-end">
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1">Cant.</label>
+                      <label className="block text-xs text-slate-500 mb-1">{t("common.quantity")}</label>
                       <input
                         type="number"
                         placeholder="1"
@@ -254,7 +256,7 @@ export default function EditInvoicePage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1">Precio</label>
+                      <label className="block text-xs text-slate-500 mb-1">{t("common.price")}</label>
                       <input
                         type="number"
                         placeholder="0.00"
@@ -280,7 +282,7 @@ export default function EditInvoicePage() {
 
           <div className="bg-slate-50 rounded-xl border border-slate-200 p-6">
             <div className="flex justify-between items-center text-xl font-bold">
-              <span className="text-slate-600">Total</span>
+              <span className="text-slate-600">{t("common.total")}</span>
               <span className="text-slate-900">AWG {total.toFixed(2)}</span>
             </div>
           </div>
@@ -292,25 +294,25 @@ export default function EditInvoicePage() {
             disabled={loading}
             className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 transition"
           >
-            {loading ? "Guardando..." : "Guardar Cambios"}
+            {loading ? t("invoices.saving") : t("invoices.saveChanges")}
           </button>
           <button
             onClick={() => router.push(`/invoices/${id}`)}
             className="px-6 py-3 border border-slate-300 rounded-xl text-slate-600 hover:bg-slate-100 transition"
           >
-            Cancelar
+            {t("common.cancel")}
           </button>
         </div>
 
         {showAdminModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-              <h3 className="text-lg font-bold text-slate-900 mb-4">Verificar Admin</h3>
-              <p className="text-sm text-slate-600 mb-4">Ingresa credenciales de admin para guardar cambios</p>
+              <h3 className="text-lg font-bold text-slate-900 mb-4">{t("invoices.adminVerification")}</h3>
+              <p className="text-sm text-slate-600 mb-4">{t("invoices.adminVerifyText")}</p>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email Admin</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">{t("invoices.adminEmail")}</label>
                   <input
                     type="email"
                     value={adminEmail}
@@ -320,7 +322,7 @@ export default function EditInvoicePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">{t("invoices.adminPassword")}</label>
                   <input
                     type="password"
                     value={adminPassword}
@@ -339,7 +341,7 @@ export default function EditInvoicePage() {
                     onClick={verifyAdminAndSave}
                     className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium"
                   >
-                    Confirmar
+                    {t("common.confirm")}
                   </button>
                   <button
                     onClick={() => {
@@ -350,7 +352,7 @@ export default function EditInvoicePage() {
                     }}
                     className="flex-1 bg-slate-100 text-slate-700 py-2 rounded-lg font-medium"
                   >
-                    Cancelar
+                    {t("common.cancel")}
                   </button>
                 </div>
               </div>

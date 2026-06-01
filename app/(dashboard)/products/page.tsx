@@ -129,14 +129,14 @@ export default function ProductsPage() {
                           </Link>
                         </div>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${getCategoryColor(cat)}`}>
-                          {product.cantidad_total || 0} disponibles
+                          {product.cantidad_total || 0} {t("products.quantity")}
                         </span>
                         {product.description && (
                           <p className="text-sm text-slate-500 mb-2 line-clamp-2">{product.description}</p>
                         )}
                         <p className="text-xl font-bold text-blue-600">
                           {formatCurrency(product.precio_dia || product.price)}
-                          <span className="text-sm font-normal text-slate-500"> /día</span>
+                          <span className="text-sm font-normal text-slate-500"> {t("products.perDay")}</span>
                         </p>
                       </div>
                     ))}

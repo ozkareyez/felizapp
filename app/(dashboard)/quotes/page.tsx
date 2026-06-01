@@ -91,7 +91,7 @@ export default function QuotesPage() {
   }
 
   const deleteQuote = async (id) => {
-    if (!confirm("¿Eliminar esta cotización?")) return
+    if (!confirm(t("common.sureDelete"))) return
     await supabase.from("quote_items").delete().eq("quote_id", id)
     await supabase.from("quotes").delete().eq("id", id)
     getData()
@@ -119,7 +119,7 @@ export default function QuotesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Buscar por cliente o número..."
+            placeholder={t("quotes.searchQuote")}
             value={search}
             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -132,17 +132,17 @@ export default function QuotesPage() {
             onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
             className="border border-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="all">Todos</option>
-            <option value="pending">Pendiente</option>
-            <option value="accepted">Aceptada</option>
-            <option value="rejected">Rechazada</option>
-            <option value="converted">Convertida</option>
+            <option value="all">{t("quotes.all")}</option>
+            <option value="pending">{t("quotes.pendingStatus")}</option>
+            <option value="accepted">{t("quotes.accepted")}</option>
+            <option value="rejected">{t("quotes.rejected")}</option>
+            <option value="converted">{t("quotes.converted")}</option>
           </select>
         </div>
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-slate-500 mb-4">{filteredQuotes.length} cotización(es) encontrada(s)</p>
+      <p className="text-sm text-slate-500 mb-4">{t("quotes.results", { count: filteredQuotes.length })}</p>
 
       {/* Desktop Table */}
       <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -174,7 +174,7 @@ export default function QuotesPage() {
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center text-violet-600 font-semibold text-xs">
                           {(clients[quote.client_id] || "C")[0].toUpperCase()}
                         </div>
-                        <span className="font-medium text-slate-900">{clients[quote.client_id] || "Cargando..."}</span>
+                        <span className="font-medium text-slate-900">{clients[quote.client_id] || t("common.loading")}</span>
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm text-slate-500">{formatDate(quote.created_at)}</td>
@@ -217,8 +217,8 @@ export default function QuotesPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
               <FileText className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No hay cotizaciones</h3>
-            <p className="text-slate-500 mb-4">No se encontraron cotizaciones con los filtros aplicados</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("quotes.noQuotes")}</h3>
+            <p className="text-slate-500 mb-4">{t("common.noResults")}</p>
           </div>
         )}
       </div>
@@ -246,7 +246,7 @@ export default function QuotesPage() {
                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center text-violet-600 font-semibold text-xs">
                       {(clients[quote.client_id] || "C")[0].toUpperCase()}
                     </div>
-                    <span className="font-medium text-slate-900 text-sm">{clients[quote.client_id] || "Cliente"}</span>
+                    <span className="font-medium text-slate-900 text-sm">{clients[quote.client_id] || t("common.name")}</span>
                   </div>
                   <span className="font-semibold text-slate-900">{formatCurrency(quote.total)}</span>
                 </div>
@@ -255,7 +255,7 @@ export default function QuotesPage() {
                 <Link href={`/quotes/${quote.id}/convert`} className="block mt-2">
                   <div className="flex gap-2">
                     <div className="flex-1 text-center py-2 text-sm text-green-600 bg-green-50 rounded-lg hover:bg-green-100 transition">
-                      Convertir a Factura
+                      {t("quotes.convertToInvoice")}
                     </div>
                   </div>
                 </Link>
@@ -269,8 +269,8 @@ export default function QuotesPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
               <FileText className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">No hay cotizaciones</h3>
-            <p className="text-slate-500 mb-4">No se encontraron resultados</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("quotes.noQuotes")}</h3>
+            <p className="text-slate-500 mb-4">{t("common.noResults")}</p>
           </div>
         )}
       </div>
